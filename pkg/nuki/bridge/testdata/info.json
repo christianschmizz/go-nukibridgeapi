@@ -1,0 +1,31 @@
+{
+  "bridgeType": 1,
+  "ids": {
+    "hardwareId": 548263954,
+    "serverId": 448942400
+  },
+  "versions": {
+    "firmwareVersion": "2.7.0",
+    "wifiFirmwareVersion": "2.1.17"
+  },
+  "uptime": 1278,
+  "currentTime": "2020-10-26T22:50:56+00:00",
+  "wlanConnected": true,
+  "serverConnected": true,
+  "scanResults": [
+    {
+      "deviceType": 2,
+      "nukiId": 509600314,
+      "name": "Nuki_Opener_1E5FE23A",
+      "rssi": -57,
+      "paired": true
+    },
+    {
+      "deviceType": 0,
+      "nukiId": 597878773,
+      "name": "Nuki_23A2E7F5",
+      "rssi": -61,
+      "paired": true
+    }
+  ]
+}
