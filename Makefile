@@ -32,7 +32,7 @@ GO_LDFLAGS := -X github.com/christianschmizz/go-nukibridgeapi/internal/build.Dat
 GO_LDFLAGS_STATIC := '-extldflags "-static"' $(GO_LDFLAGS)
 
 BUILD_FLAGS = -a -trimpath -ldflags "$(GO_LDFLAGS)"
-BUILD_FLAGS_STATIC = -a -v -trimpath -ldflags "$(GO_LDFLAGS_STATIC)"
+BUILD_FLAGS_STATIC = -a -trimpath -ldflags "$(GO_LDFLAGS_STATIC)"
 
 ifeq ($(BUILD_VERBOSE),1)
 	BUILD_FLAGS += -v
@@ -59,6 +59,14 @@ build-static: build-static-darwin build-static-linux build-static-windows
 build:
 	$(Q)go build $(BUILD_FLAGS) -o "$(BINARY_NAME)-$(GOOS)-$(GOARCH)" ./cmd/nukibridgectl/
 
+.PHONY: install
+install:
+	$(Q)go install $(BUILD_FLAGS) ./cmd/nukibridgectl/
+
 .PHONY: test
 test:
 	$(Q)go test -v ./...
+
+.PHONY: version
+version:
+	$(ECHO) $(VERSION)
