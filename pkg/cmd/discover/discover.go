@@ -2,6 +2,7 @@ package discover
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"text/tabwriter"
 
@@ -22,15 +23,18 @@ func CreateCommand() *cobra.Command {
 			}
 			log.Info().Msgf("found %d bridges", len(discovery.Bridges))
 
-			w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
-			fmt.Fprintln(w,"ID\tIP\tPort\tUpdated")
-			for _, bridge := range discovery.Bridges {
-				fmt.Fprintf(w, "%d\t%s\t%d\t%s%%\n", bridge.BridgeID, bridge.IP, bridge.Port, bridge.DateUpdated)
-			}
-			w.Flush()
-
+			printBridges(os.Stdout, discovery.Bridges)
 		},
 	}
 
 	return discoverCmd
+}
+
+func printBridges(writer io.Writer, bridges []nukibridge.BridgeInfo) {
+	w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
+	fmt.Fprintln(w, "ID\tIP\tPort\tUpdated")
+	for _, bridge := range bridges {
+		fmt.Fprintf(w, "%d\t%s\t%d\t%s\n", bridge.BridgeID, bridge.IP, bridge.Port, bridge.DateUpdated)
+	}
+	w.Flush()
 }
