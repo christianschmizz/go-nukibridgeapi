@@ -13,7 +13,7 @@ type ListCallbacksResponse struct {
 	Callbacks []Callback `json:"callbacks"`
 }
 
-func (c *connection) ListCallbacks() (*ListCallbacksResponse, error) {
+func (c *Connection) ListCallbacks() (*ListCallbacksResponse, error) {
 	var listCallbacksResponse ListCallbacksResponse
 	if err := c.get(c.hashedURL("/callback/list", nil), &listCallbacksResponse); err != nil {
 		return nil, fmt.Errorf("could not fetch list of callbacks: %w", err)
@@ -26,7 +26,7 @@ type RemoveCallbackResponse struct {
 	Message string `json:"message,omitempty"`
 }
 
-func (c *connection) RemoveCallback(callbackID int) (*RemoveCallbackResponse, error) {
+func (c *Connection) RemoveCallback(callbackID int) (*RemoveCallbackResponse, error) {
 	options := &struct {
 		CallbackID int `url:"id"`
 	}{callbackID}
@@ -42,7 +42,7 @@ type AddCallbackResponse struct {
 	Message string `json:"message,omitempty"`
 }
 
-func (c *connection) AddCallback(callbackURL string) (*AddCallbackResponse, error) {
+func (c *Connection) AddCallback(callbackURL string) (*AddCallbackResponse, error) {
 	options := &struct {
 		CallbackURL string `url:"url"`
 	}{callbackURL}

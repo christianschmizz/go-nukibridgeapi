@@ -1,0 +1,34 @@
+[
+  {
+    "deviceType": 0,
+    "nukiId": 527875674,
+    "name": "Eine Tür",
+    "firmwareVersion": "2.8.15",
+    "lastKnownState": {
+      "mode": 2,
+      "state": 3,
+      "stateName": "unlocked",
+      "batteryCritical": false,
+      "batteryCharging": false,
+      "batteryChargeState": 100,
+      "doorsensorState": 2,
+      "doorsensorStateName": "door closed",
+      "timestamp": "2020-01-30T20:00:00+00:00"
+    }
+  },
+  {
+    "deviceType": 2,
+    "nukiId": 519611324,
+    "name": "Andere Tür",
+    "firmwareVersion": "1.5.3",
+    "lastKnownState": {
+      "mode": 2,
+      "state": 1,
+      "stateName": "online",
+      "batteryCritical": false,
+      "ringactionTimestamp": "2020-01-30T20:00:00+00:00",
+      "ringactionState": false,
+      "timestamp": "2020-01-30T20:00:00+00:00"
+    }
+  }
+]

@@ -34,12 +34,12 @@ func createListCommand() *cobra.Command {
 	return cmd
 }
 
-func printDeviceList(writer io.Writer, devices *nukibridge.ListResponse) {
+func printDeviceList(writer io.Writer, devices nukibridge.ListPairedDevicesResponse) {
 	w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
 	defer w.Flush()
 
-	fmt.Fprintln(w,"ID\tType\tName\tBattery")
-	for _, d := range *devices {
-		fmt.Fprintf(w, "%d\t%d\t%s\t%d%%\n", d.ID, d.Type, d.Name, d.LastKnownState.BatteryChargeState)
+	_, _ = fmt.Fprintln(w, "ID\tType\tName\tBattery")
+	for _, d := range devices {
+		_, _ = fmt.Fprintf(w, "%d\t%d\t%s\t%d%%\n", d.ID, d.Type, d.Name, d.LastKnownState.BatteryChargeState)
 	}
 }

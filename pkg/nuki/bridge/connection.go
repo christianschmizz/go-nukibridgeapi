@@ -18,14 +18,14 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
-type connection struct {
+type Connection struct {
 	bridgeHost string
 	token      string
 	scan       map[nuki.NukiID]*ScanResult
 }
 
-func ScanOnConnect() func(*connection) {
-	return func(c *connection) {
+func ScanOnConnect() func(*Connection) {
+	return func(c *Connection) {
 		info, err := c.Info()
 		if err != nil {
 			panic(err)
@@ -37,15 +37,15 @@ func ScanOnConnect() func(*connection) {
 	}
 }
 
-func ConnectWithToken(bridgeHost, token string, options ...func(*connection)) (*connection, error) {
-	conn := &connection{bridgeHost: bridgeHost, token: token, scan: map[nuki.NukiID]*ScanResult{}}
+func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*Connection, error) {
+	conn := &Connection{bridgeHost: bridgeHost, token: token, scan: map[nuki.NukiID]*ScanResult{}}
 	for _, opt := range options {
 		opt(conn)
 	}
 	return conn, nil
 }
 
-func (c *connection) hashedURL(p string, queryParams interface{}) string {
+func (c *Connection) hashedURL(p string, queryParams interface{}) string {
 	ts := time.Now().UTC().Format(time.RFC3339)
 	rnr := rand.Intn(1000)
 
@@ -73,7 +73,7 @@ func (c *connection) hashedURL(p string, queryParams interface{}) string {
 	return u.String()
 }
 
-func (c *connection) get(url string, o interface{}) error {
+func (c *Connection) get(url string, o interface{}) error {
 	log.Debug().Str("url", url).Msg("")
 	resp, err := http.Get(url)
 	if err != nil {
@@ -87,7 +87,7 @@ func (c *connection) get(url string, o interface{}) error {
 	return nil
 }
 
-func (c *connection) isKnown(nukiID nuki.NukiID) (*ScanResult, bool) {
+func (c *Connection) isKnown(nukiID nuki.NukiID) (*ScanResult, bool) {
 	if len(c.scan) == 0 {
 		return nil, false
 	}

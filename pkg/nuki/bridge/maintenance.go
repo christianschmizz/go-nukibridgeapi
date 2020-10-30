@@ -22,7 +22,7 @@ type logOptions struct {
 	Count  int `url:"count"`
 }
 
-func (c *connection) Log(offset, count int) (Log, error) {
+func (c *Connection) Log(offset, count int) (Log, error) {
 	options := logOptions{offset, count}
 	var log Log
 	if err := c.get(c.hashedURL("log", options), &log); err != nil {

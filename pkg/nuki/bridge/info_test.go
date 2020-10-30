@@ -12,33 +12,7 @@ import (
 	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
 
-func TestConnection_Info(t *testing.T) {
-	conn, err := nukibridge.ConnectWithToken("192.168.1.11:8080", "abcdef")
-	if assert.NoError(t, err) {
-		info, err := conn.Info()
-		if assert.NoError(t, err) {
-			assert.Equal(t, nukibridge.Info{
-				BridgeType: nukibridge.TypeHardware,
-				IDs: struct {
-					HardwareID int `json:"hardwareId"`
-					ServerID   int `json:"serverId"`
-				}{548263954, 448942400},
-				Versions: struct {
-					FirmwareVersion     string `json:"firmwareVersion"`
-					WifiFirmwareVersion string `json:"wifiFirmwareVersion"`
-				}{"2.7.0", "2.1.17"},
-				Uptime:          2067,
-				CurrentTime:     time.Now().UTC(),
-				ServerConnected: true,
-				ScanResults: []nukibridge.ScanResult{
-					{509600314, 0, "Nuki_Opener_1E5FE23A", -57, true},
-				},
-			}, *info)
-		}
-	}
-}
-
-func TestSession_DecodeInfo(t *testing.T) {
+func TestDecode_Info(t *testing.T) {
 	infoJson, err := ioutil.ReadFile(filepath.Join("testdata", "info.json"))
 	assert.NoError(t, err)
 

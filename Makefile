@@ -22,6 +22,8 @@ BINARY_NAME_LINUX = $(BINARY_NAME)-linux-$(GOARCH)
 BINARY_NAME_WINDOWS = $(BINARY_NAME)-windows-$(GOARCH)
 BINARY_NAME_DARWIN = $(BINARY_NAME)-darwin-$(GOARCH)
 
+COMMAND = ./cmd/$(nukibridgectl)/
+
 DATE_FMT = +%Y-%m-%d
 BUILD_DATE ?= $(shell date "$(DATE_FMT)")
 
@@ -42,30 +44,34 @@ endif
 .PHONY: build-static-linux
 build-static-linux:
 	$(ECHO) building $@
-	$(Q)GOOS=linux go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_LINUX)-static" ./cmd/nukibridgectl/
+	$(Q)GOOS=linux go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_LINUX)-static" $(COMMAND)
 
 .PHONY: build-static-windows
 build-static-windows:
-	$(Q)GOOS=windows go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_WINDOWS)-static" ./cmd/nukibridgectl/
+	$(Q)GOOS=windows go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_WINDOWS)-static" $(COMMAND)
 
 .PHONY: build-static-darwin
 build-static-darwin:
-	$(Q)GOOS=darwin go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_DARWIN)-static" ./cmd/nukibridgectl/
+	$(Q)GOOS=darwin go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_DARWIN)-static" $(COMMAND)
 
 .PHONY: build-static
 build-static: build-static-darwin build-static-linux build-static-windows
 
 .PHONY: build
 build:
-	$(Q)go build $(BUILD_FLAGS) -o "$(BINARY_NAME)-$(GOOS)-$(GOARCH)" ./cmd/nukibridgectl/
+	$(Q)go build $(BUILD_FLAGS) -o "$(BINARY_NAME)-$(GOOS)-$(GOARCH)" $(COMMAND)
 
 .PHONY: install
 install:
-	$(Q)go install $(BUILD_FLAGS) ./cmd/nukibridgectl/
+	$(Q)go install $(BUILD_FLAGS) $(COMMAND)
 
 .PHONY: test
 test:
 	$(Q)go test -v ./...
+
+.PHONY: integration-test
+integration-test:
+	$(Q)go test -v ./... -failfast -tags=integration -args -host $(BRIDGE_HOST) -token $(BRIDGE_TOKEN)
 
 .PHONY: version
 version:

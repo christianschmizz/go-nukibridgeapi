@@ -37,7 +37,7 @@ func isActionSupported(action nuki.LockAction, deviceType nuki.DeviceType) bool 
 }
 
 // Performs a lock action on the Nuki device with the given nukiID.
-func (c *connection) LockAction(nukiID nuki.NukiID, action nuki.LockAction, options ...func(*lockActionOptions)) (*LockActionResponse, error) {
+func (c *Connection) LockAction(nukiID nuki.NukiID, action nuki.LockAction, options ...func(*lockActionOptions)) (*LockActionResponse, error) {
 	if !isActionSupported(action, nukiID.DeviceType) {
 		return nil, fmt.Errorf("unsupported lockAction: %v", action)
 	}

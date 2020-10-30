@@ -12,14 +12,7 @@ import (
 	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
 
-func TestDiscover(t *testing.T) {
-	d, err := nukibridge.Discover()
-	if assert.NoError(t, err) {
-		assert.Equal(t, 0, d.ErrorCode)
-	}
-}
-
-func TestDiscover_Decode(t *testing.T) {
+func TestDecode_Discover(t *testing.T) {
 	data, err := ioutil.ReadFile(filepath.Join("testdata", "discover.json"))
 	assert.NoError(t, err)
 

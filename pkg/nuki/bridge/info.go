@@ -38,7 +38,7 @@ type Info struct {
 	ScanResults     []ScanResult `json:"scanResults"`
 }
 
-func (c *connection) Info() (*Info, error) {
+func (c *Connection) Info() (*Info, error) {
 	var info Info
 	if err := c.get(c.hashedURL("info", nil), &info); err != nil {
 		return nil, fmt.Errorf("could not fetch bridge info: %w", err)

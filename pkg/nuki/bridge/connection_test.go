@@ -2,9 +2,6 @@ package bridge_test
 
 import (
 	"fmt"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
 
 	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
@@ -27,15 +24,5 @@ func ExampleScanOnConnect() {
 	_, err := nukibridge.ConnectWithToken("192.168.1.11:8080", "abcdef", nukibridge.ScanOnConnect())
 	if err != nil {
 		panic(err)
-	}
-}
-
-func TestSession_ListPairedDevices(t *testing.T) {
-	conn, err := nukibridge.ConnectWithToken("192.168.1.11:8080", "abcdef")
-	if assert.NoError(t, err) {
-		devices, err := conn.ListPairedDevices()
-		if assert.NoError(t, err) {
-			assert.Len(t, devices, 2)
-		}
 	}
 }

@@ -26,7 +26,7 @@ type lockStateOptions struct {
 }
 
 // Retrieves and returns the current lock state of a given Nuki device
-func (c *connection) LockState(nukiID nuki.NukiID) (*LockStateResponse, error) {
+func (c *Connection) LockState(nukiID nuki.NukiID) (*LockStateResponse, error) {
 	options := &lockStateOptions{nukiID.DeviceID, nukiID.DeviceType}
 
 	var response LockStateResponse
