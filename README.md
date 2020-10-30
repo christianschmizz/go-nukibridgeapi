@@ -88,4 +88,4 @@ The file should look like this:
 
 If you want to pass on your configuration at the command-line you can do so, too:
 
-    $ nukibridgectl bridge --host 192.168.178.1:8080 --token <command>
+    $ nukibridgectl bridge --host 192.168.178.1:8080 --token abcde6 <command>
