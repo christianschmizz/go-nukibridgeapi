@@ -22,7 +22,7 @@ BINARY_NAME_LINUX = $(BINARY_NAME)-linux-$(GOARCH)
 BINARY_NAME_WINDOWS = $(BINARY_NAME)-windows-$(GOARCH)
 BINARY_NAME_DARWIN = $(BINARY_NAME)-darwin-$(GOARCH)
 
-COMMAND = ./cmd/$(nukibridgectl)/
+COMMAND = ./cmd/$(BINARY_NAME)/
 
 DATE_FMT = +%Y-%m-%d
 BUILD_DATE ?= $(shell date "$(DATE_FMT)")
