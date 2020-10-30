@@ -30,9 +30,6 @@ func CreateCommand() *cobra.Command {
 
 	cmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nukibridgectl.yaml)")
 
-	cmd.PersistentFlags().BoolVar(&useViper, "viper", false, "use Viper for configuration")
-	viper.BindPFlag("useViper", cmd.PersistentFlags().Lookup("viper"))
-
 	cmd.AddCommand(bridge.CreateCommand())
 	cmd.AddCommand(discover.CreateCommand())
 
