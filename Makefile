@@ -54,8 +54,12 @@ build-static-windows:
 build-static-darwin:
 	$(Q)GOOS=darwin go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_DARWIN)-static" $(COMMAND)
 
+.PHONY: build-cross-static
+build-cross-static: build-static-darwin build-static-linux build-static-windows
+
 .PHONY: build-static
-build-static: build-static-darwin build-static-linux build-static-windows
+build-static:
+	$(Q)go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_DARWIN)-static" $(COMMAND)
 
 .PHONY: build
 build: | checkdeps lint test
