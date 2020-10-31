@@ -1,10 +1,13 @@
 # go-nukibridgeapi
 
-This project aims to make Nuki's Bridge API accessible from the command-line.
+This project aims to make Nuki's Bridge API accessible. Either through the 
+provided library or as a program from the command-line.
+
+![Develop](https://github.com/christianschmizz/go-nukibridgeapi/workflows/Build/badge.svg?branch=develop)
 
 Therefore it is introducing a command-line tool called `nukibridgectl` which 
 implements access to the basic functions of your Nuki bridge for now.
- 
+
 # Activate the Bridge API
 
 Before you can access the bridge's API you have to activate it. *It's not active
