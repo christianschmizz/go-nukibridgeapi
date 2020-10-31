@@ -1,7 +1,6 @@
 package root
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/mitchellh/go-homedir"
@@ -15,20 +14,19 @@ import (
 
 var (
 	cfgFile string
+	noViper bool
 )
 
-// CreateCommand create the root command
-func CreateCommand() *cobra.Command {
+// createCommand creates the root command
+func createCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "nukibridgectl <command> <subcommand> [flags]",
 		Short: "Nuki Bridge CLI",
 		Long:  `Work seamlessly with your Nuki Bridge from the command line.`,
-		Run: func(cmd *cobra.Command, args []string) {
-			// Do Stuff Here
-		},
 	}
 
 	cmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nukibridgectl.yaml)")
+	cmd.PersistentFlags().BoolVar(&noViper, "noViper", false, "disable the use of viper")
 
 	cmd.AddCommand(bridge.CreateCommand())
 	cmd.AddCommand(discover.CreateCommand())
@@ -36,12 +34,25 @@ func CreateCommand() *cobra.Command {
 	return cmd
 }
 
-func init() {
-	// Run before every command
+// Execute command
+func Execute() {
+	rootCmd := createCommand()
+
+	// Initialize viper when initializing any cobra commands
 	cobra.OnInitialize(initViper)
+
+	if err := rootCmd.Execute(); err != nil {
+		log.Fatal().Err(err).Msg("")
+	}
+
+	os.Exit(0)
 }
 
 func initViper() {
+	if noViper {
+		return
+	}
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
@@ -64,13 +75,7 @@ func initViper() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			fmt.Fprintf(os.Stderr, "Config file not found; ignore error if desired")
-			os.Exit(1)
-		} else {
-			fmt.Fprintf(os.Stderr, "Config file was found but another error was produced")
-			os.Exit(1)
-		}
+		log.Fatal().Err(err).Msg("could not read config")
 	}
 
 	log.Info().Str("config_file", viper.ConfigFileUsed()).Msg("using config file")

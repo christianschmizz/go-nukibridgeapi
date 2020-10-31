@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -13,24 +12,21 @@ import (
 )
 
 func main() {
-	buildDate := build.Date
-	buildVersion := build.Version
-
 	hasDebug := os.Getenv("DEBUG") != ""
 
 	// Default level for this example is info, unless debug is active
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	zerolog.SetGlobalLevel(zerolog.WarnLevel)
 	if hasDebug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
 
-	log.Info().Str("buildDate", buildDate).Str("buildVersion", buildVersion).Bool("debugMode", hasDebug).Msg("")
+	log.Info().
+		Str("build_date", build.Date).
+		Str("build_version", build.Version).
+		Bool("debug_mode", hasDebug).
+		Msg("booting")
 
-	if err := root.CreateCommand().Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	os.Exit(0)
+	root.Execute()
 }
