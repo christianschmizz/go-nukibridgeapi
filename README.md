@@ -84,8 +84,27 @@ The file should look like this:
     host: "192.168.178.1:8080"
     token: abcde6
 
+To use a custom name or location for your configuration file:
+
+    $ nukibridgectl --config /my/config/feelfree.yaml ...
+
 ## Params
 
 If you want to pass on your configuration at the command-line you can do so, too:
 
     $ nukibridgectl bridge --host 192.168.178.1:8080 --token abcde6 <command>
+
+# Tests
+
+## Integration tests
+
+To run the tests on a physical bridge at your LAN:
+
+    % make integration-test BRIDGE_HOST=<ip:port> BRIDGE_TOKEN=<token>
+
+# Debugging things
+
+You noticed some unexpected behaviour or just want to know whats going on
+behind the scenes? You can enable debug logging by setting DEBUG at your env.
+
+    $ DEBUG=1 nukibridgectl bridge --host 192.168.178.1:8080 --token abcde6 info
