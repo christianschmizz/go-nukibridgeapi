@@ -44,13 +44,17 @@ const (
 
 	// Opener is a Nuki Opener used for integration into door-opener systems
 	Opener DeviceType = 2
+)
 
+const (
 	// DoorMode is the operational mode after complete setup (applies to smart lock and opener)
 	DoorMode LockMode = 2
 
 	// ContinuousMode means Ring to Open is permanently active (applies to opener only)
 	ContinuousMode LockMode = 3
+)
 
+const (
 	// SmartLockStateUncalibrated means the smart lock is not yet configured
 	SmartLockStateUncalibrated LockState = 0
 
@@ -80,7 +84,9 @@ const (
 
 	// SmartLockStateUndefined means the smart lock is in an undefined/unknown state
 	SmartLockStateUndefined LockState = 255
+)
 
+const (
 	// OpenerStateUntrained means the opener is not yet configured
 	OpenerStateUntrained LockState = 0
 
@@ -101,24 +107,58 @@ const (
 
 	// OpenerStateUndefined means that the state of the opener is unknown.
 	OpenerStateUndefined LockState = 255
+)
 
-	SmartLockActionUnlock               LockAction = 1
-	SmartLockActionLock                 LockAction = 2
-	SmartLockActionUnlatch              LockAction = 3
-	SmartLockActionLockAndGo            LockAction = 4
+const (
+	// SmartLockActionUnlock describes the action to unlock a smart lock
+	SmartLockActionUnlock LockAction = 1
+
+	// SmartLockActionLock describes the action to lock a smart lock
+	SmartLockActionLock LockAction = 2
+
+	// SmartLockActionUnlatch describes the action to open the door
+	SmartLockActionUnlatch LockAction = 3
+
+	// SmartLockActionLockAndGo describes the action to enable Lock and Go at a smart lock
+	SmartLockActionLockAndGo LockAction = 4
+
+	// SmartLockActionLockAndGoWithUnlatch describes the action to enable Lock and Go with unlatch at a smart lock
 	SmartLockActionLockAndGoWithUnlatch LockAction = 5
+)
 
-	OpenerLockActionActivateRto              LockAction = 1
-	OpenerLockActionDeactivateRto            LockAction = 2
-	OpenerLockActionElectricStrikeActuation  LockAction = 3
-	OpenerLockActionActivateContinuousMode   LockAction = 4
+const (
+
+	// OpenerLockActionActivateRto describes the action to enable Ring To Open at the opener
+	OpenerLockActionActivateRto LockAction = 1
+
+	// OpenerLockActionDeactivateRto describes the action to disable Ring To Open at the opener
+	OpenerLockActionDeactivateRto LockAction = 2
+
+	// OpenerLockActionElectricStrikeActuation describes the action to enable electric strike actuation at the opener
+	OpenerLockActionElectricStrikeActuation LockAction = 3
+
+	// OpenerLockActionActivateContinuousMode describes the action to enable activate continuous mode at the opener
+	OpenerLockActionActivateContinuousMode LockAction = 4
+
+	// OpenerLockActionDeactivateContinuousMode describes the action to deactivate continuous mode at the opener
 	OpenerLockActionDeactivateContinuousMode LockAction = 5
+)
 
-	DoorsensorStateDeactivated      DoorsensorState = 1
-	DoorsensorStateDoorClosed       DoorsensorState = 2
-	DoorsensorStateDoorOpened       DoorsensorState = 3
+const (
+	// DoorsensorStateDeactivated describes that the doorsensor is deativated
+	DoorsensorStateDeactivated DoorsensorState = 1
+
+	// DoorsensorStateDoorClosed describes that the door was detected to be closed
+	DoorsensorStateDoorClosed DoorsensorState = 2
+
+	// DoorsensorStateDoorOpened describes that the door was deteced to be open
+	DoorsensorStateDoorOpened DoorsensorState = 3
+
+	// DoorsensorStateDoorStateUnknown describes that the state of the door is unknown
 	DoorsensorStateDoorStateUnknown DoorsensorState = 4
-	DoorsensorStateCalibrating      DoorsensorState = 5
+
+	// DoorsensorStateCalibrating describes that the doorsensor is currently being calibrated
+	DoorsensorStateCalibrating DoorsensorState = 5
 )
 
 // SmartLockActionFromString retrieves the appropriate action from a string
@@ -141,6 +181,7 @@ func SmartLockActionFromString(s string) (e LockAction, err error) {
 }
 
 var (
+	// SmartLockActions contains all actions available for a smart lock
 	SmartLockActions = [...]LockAction{
 		SmartLockActionUnlock,
 		SmartLockActionLock,
@@ -149,6 +190,7 @@ var (
 		SmartLockActionLockAndGoWithUnlatch,
 	}
 
+	// OpenerLockActions contains all actions available for an opener
 	OpenerLockActions = [...]LockAction{
 		OpenerLockActionActivateRto,
 		OpenerLockActionDeactivateRto,
@@ -157,6 +199,7 @@ var (
 		OpenerLockActionDeactivateContinuousMode,
 	}
 
+	// SmartLockStates contains all valid states of a smart lock
 	SmartLockStates = [...]LockState{
 		SmartLockStateUncalibrated,
 		SmartLockStateLocked,
@@ -170,6 +213,7 @@ var (
 		SmartLockStateUndefined,
 	}
 
+	// OpenerLockStates contains all valid states of an opener
 	OpenerLockStates = [...]LockState{
 		OpenerStateUntrained,
 		OpenerStateOnline,
