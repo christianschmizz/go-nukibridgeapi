@@ -2,7 +2,7 @@
 
 This project aims to make Nuki's Bridge API accessible from the command-line.
 
-Therefor it is introducing a command-line tool called `nukibridgectl` which 
+Therefore it is introducing a command-line tool called `nukibridgectl` which 
 implements access to the basic functions of your Nuki bridge for now.
  
 # Activate the Bridge API
@@ -15,7 +15,7 @@ by default.*
 If you are unsure about whether the bridge's API is already activated or not 
 you can check with curl:
 
-    $ curl http://<bridge-ip>
+    $ curl http://<bridge-address>
     
 It will come up with `HTTP 400 Bad Request` when active. Otherwise you'll see 
 something like `Connection refused`. 
