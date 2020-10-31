@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"net"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -40,8 +41,25 @@ func ScanOnConnect() func(*Connection) {
 	}
 }
 
+func IsValidBridgeHost(bridgeHost string) (error, bool) {
+	ip, _, err := net.SplitHostPort(bridgeHost)
+	if err != nil {
+		return fmt.Errorf("invalid host: %w", err), false
+	}
+
+	if net.ParseIP(ip) == nil {
+		return fmt.Errorf("invalid ip address: %s", ip), false
+	}
+
+	return nil, true
+}
+
 // ConnectWithToken sets up a connection to the bridge using the given token for authentication
 func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*Connection, error) {
+	if err, ok := IsValidBridgeHost(bridgeHost); !ok {
+		return nil, fmt.Errorf("invalid bridge host %s: %w", bridgeHost, err)
+	}
+
 	conn := &Connection{bridgeHost: bridgeHost, token: token, scan: map[nuki.ID]*ScanResult{}}
 	for _, opt := range options {
 		opt(conn)
@@ -79,7 +97,7 @@ func (c *Connection) hashedURL(path string, queryParams interface{}) string {
 }
 
 func (c *Connection) get(url string, o interface{}) error {
-	log.Debug().Str("url", url).Msg("")
+	log.Debug().Str("url", url).Msg("calling bridge API")
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
