@@ -52,7 +52,7 @@ func TestIsValidBridgeHost(t *testing.T) {
 		tt := tt // NOTE: https://github.com/golang/go/wiki/CommonMistakes#using-goroutines-on-loop-iterator-variables
 		t.Run(tt.host, func(t *testing.T) {
 			t.Parallel() // marks each test case as capable of running in parallel with each other
-			if err, ok := bridgeapi.IsValidBridgeHost(tt.host); ok != tt.isValid {
+			if ok, err := bridgeapi.IsValidBridgeHost(tt.host); ok != tt.isValid {
 				t.Errorf("expected \"%s\" to be %v: %s", tt.host, tt.isValid, err)
 			}
 		})

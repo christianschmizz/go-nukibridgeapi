@@ -41,22 +41,23 @@ func ScanOnConnect() func(*Connection) {
 	}
 }
 
-func IsValidBridgeHost(bridgeHost string) (error, bool) {
+// IsValidBridgeHost checks for validity of foven address
+func IsValidBridgeHost(bridgeHost string) (bool, error) {
 	ip, _, err := net.SplitHostPort(bridgeHost)
 	if err != nil {
-		return fmt.Errorf("invalid host: %w", err), false
+		return false, fmt.Errorf("invalid host: %w", err)
 	}
 
 	if net.ParseIP(ip) == nil {
-		return fmt.Errorf("invalid ip address: %s", ip), false
+		return false, fmt.Errorf("invalid ip address: %s", ip)
 	}
 
-	return nil, true
+	return true, nil
 }
 
 // ConnectWithToken sets up a connection to the bridge using the given token for authentication
 func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*Connection, error) {
-	if err, ok := IsValidBridgeHost(bridgeHost); !ok {
+	if ok, err := IsValidBridgeHost(bridgeHost); !ok {
 		return nil, fmt.Errorf("invalid bridge host %s: %w", bridgeHost, err)
 	}
 
