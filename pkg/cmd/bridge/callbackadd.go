@@ -7,18 +7,18 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
 
-func createCallbackAddCommand() (*cobra.Command) {
+func createCallbackAddCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add <url>",
 		Short: "List callbacks",
-		Args: cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			url := args[0]
 
-			conn, err := nukibridge.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}

@@ -13,17 +13,17 @@ import (
 )
 
 func TestDecode_Info(t *testing.T) {
-	infoJson, err := ioutil.ReadFile(filepath.Join("testdata", "info.json"))
+	infoJSON, err := ioutil.ReadFile(filepath.Join("testdata", "info.json"))
 	assert.NoError(t, err)
 
-	var info nukibridge.Info
-	err = json.Unmarshal(infoJson, &info)
+	var info nukibridge.InfoResponse
+	err = json.Unmarshal(infoJSON, &info)
 	assert.NoError(t, err)
 
 	ts, err := time.Parse(time.RFC3339, "2020-10-26T22:50:56+00:00")
 	assert.NoError(t, err)
 
-	assert.Equal(t, nukibridge.Info{
+	assert.Equal(t, nukibridge.InfoResponse{
 		BridgeType: nukibridge.TypeHardware,
 		IDs: struct {
 			HardwareID int `json:"hardwareId"`

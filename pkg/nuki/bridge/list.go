@@ -7,6 +7,7 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+// LastKnownState describes the last known state of a device
 type LastKnownState struct {
 	Mode                  int       `json:"mode"`
 	State                 int       `json:"state"`
@@ -21,6 +22,8 @@ type LastKnownState struct {
 	RingactionTimestamp   time.Time `json:"ringactionTimestamp,omitempty"`
 	Timestamp             time.Time `json:"timestamp"`
 }
+
+// DeviceInfo describes some basic information of a device
 type DeviceInfo struct {
 	ID             int             `json:"nukiId"`
 	Type           nuki.DeviceType `json:"deviceType"`
@@ -28,9 +31,10 @@ type DeviceInfo struct {
 	LastKnownState LastKnownState  `json:"lastKnownState"`
 }
 
+// ListPairedDevicesResponse represents the results of querying the paired devices
 type ListPairedDevicesResponse []DeviceInfo
 
-// Returns a list of all paired Nuki scan
+// ListPairedDevices retrieves a list of all devices paired with the bridge
 func (c *Connection) ListPairedDevices() (ListPairedDevicesResponse, error) {
 	var response ListPairedDevicesResponse
 	if err := c.get(c.hashedURL("list", nil), &response); err != nil {

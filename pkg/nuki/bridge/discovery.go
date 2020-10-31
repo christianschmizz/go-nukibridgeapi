@@ -9,9 +9,10 @@ import (
 )
 
 const (
-	discoveryUrl string = "https://api.nuki.io/discover/bridges"
+	discoveryURL string = "https://api.nuki.io/discover/bridges"
 )
 
+// BridgeInfo contains the basic information of a bridge device
 type BridgeInfo struct {
 	BridgeID    int       `json:"bridgeId,"`
 	IP          string    `json:"ip,"`
@@ -19,22 +20,23 @@ type BridgeInfo struct {
 	DateUpdated time.Time `json:"dateUpdated,"`
 }
 
-type Discovery struct {
+// DiscoverResponse represents the result of a discovery request
+type DiscoverResponse struct {
 	Bridges   []BridgeInfo `json:"bridges"`
 	ErrorCode int          `json:"errorCode,"`
 }
 
-func Discover() (*Discovery, error) {
-	resp, err := http.Get(discoveryUrl)
+// Discover requests a list of registered bridges from the public nuki API at the web
+func Discover() (*DiscoverResponse, error) {
+	resp, err := http.Get(discoveryURL)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to load discovery data from portal at %s", discoveryUrl)
+		return nil, errors.Wrapf(err, "failed to load discovery data from portal at %s", discoveryURL)
 	}
 	defer resp.Body.Close()
 
-	var discovery Discovery
-	if err := json.NewDecoder(resp.Body).Decode(&discovery); err != nil {
+	var response DiscoverResponse
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return nil, errors.Wrapf(err, "failed to decode discovery data")
 	}
-
-	return &discovery, nil
+	return &response, nil
 }

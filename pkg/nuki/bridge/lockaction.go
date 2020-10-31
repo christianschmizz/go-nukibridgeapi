@@ -8,6 +8,7 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+// LockActionResponse represents the result of a request to /lockAction
 type LockActionResponse struct {
 	Success         bool `json:"success"`
 	BatteryCritical bool `json:"batteryCritical"`
@@ -20,7 +21,8 @@ type lockActionOptions struct {
 	NoWait     bool            `url:"nowait"`
 }
 
-func NoWait() func(*lockActionOptions) {
+// Wait option is used for synchronously calling the API
+func Wait() func(*lockActionOptions) {
 	return func(options *lockActionOptions) {
 		options.NoWait = false
 	}
@@ -36,7 +38,7 @@ func isActionSupported(action nuki.LockAction, deviceType nuki.DeviceType) bool 
 	}
 }
 
-// Performs a lock action on the Nuki device with the given nukiID.
+// LockAction performs a action on the device with the given ID.
 func (c *Connection) LockAction(nukiID nuki.NukiID, action nuki.LockAction, options ...func(*lockActionOptions)) (*LockActionResponse, error) {
 	if !isActionSupported(action, nukiID.DeviceType) {
 		return nil, fmt.Errorf("unsupported lockAction: %v", action)

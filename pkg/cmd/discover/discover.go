@@ -12,6 +12,7 @@ import (
 	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
 
+// CreateCommand create the "discover" command
 func CreateCommand() *cobra.Command {
 	discoverCmd := &cobra.Command{
 		Use:   "discover",

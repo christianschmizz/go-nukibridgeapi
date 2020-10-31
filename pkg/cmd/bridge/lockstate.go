@@ -2,39 +2,30 @@ package bridge
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
 
 func createLockStateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "lockState <deviceType> <deviceID>",
 		Short: "Pull the lockState directly of the device",
-		Args: cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
-			deviceType, err := strconv.Atoi(args[0])
+			nukiID, err := resolveNukiIDFromArgs(args)
 			if err != nil {
-				log.Fatal().Err(err).Msg("invalid device's type")
+				log.Fatal().Err(err).Msg("failed to resolve nukiID from args")
 			}
 
-			deviceID, err := strconv.Atoi(args[1])
-			if err != nil {
-				log.Fatal().Err(err).Msg("invalid device's ID")
-			}
-
-			nukiID := nuki.NukiID{deviceID, nuki.DeviceType(deviceType)}
-
-			conn, err := nukibridge.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}
-			state, err := conn.LockState(nukiID)
+			state, err := conn.LockState(*nukiID)
 			if err != nil {
 				log.Fatal().Err(err).Msg("")
 			}

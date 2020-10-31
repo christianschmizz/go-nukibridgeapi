@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -14,10 +14,10 @@ import (
 )
 
 var (
-	cfgFile  string
-	useViper bool
+	cfgFile string
 )
 
+// CreateCommand create the root command
 func CreateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "nukibridgectl <command> <subcommand> [flags]",

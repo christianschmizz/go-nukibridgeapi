@@ -17,11 +17,11 @@ func TestDecode_Discover(t *testing.T) {
 	assert.NoError(t, err)
 
 	{
-		var discovery nukibridge.Discovery
+		var discovery nukibridge.DiscoverResponse
 		err := json.Unmarshal(data, &discovery)
 		assert.NoError(t, err)
 		updated, _ := time.Parse(time.RFC3339, "2020-10-24T17:47:13Z")
-		assert.Equal(t, nukibridge.Discovery{
+		assert.Equal(t, nukibridge.DiscoverResponse{
 			[]nukibridge.BridgeInfo{{
 				BridgeID:    448942400,
 				IP:          "192.168.1.50",

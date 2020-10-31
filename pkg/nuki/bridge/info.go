@@ -7,6 +7,7 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+// ScanResult represents a device found in reach of the bridge
 type ScanResult struct {
 	ID     int             `json:"nukiId"`
 	Type   nuki.DeviceType `json:"deviceType"`
@@ -15,6 +16,7 @@ type ScanResult struct {
 	Paired bool            `json:"paired"`
 }
 
+// NukiID assembles the ID from a result
 func (r *ScanResult) NukiID() *nuki.NukiID {
 	return &nuki.NukiID{
 		DeviceID:   r.ID,
@@ -22,7 +24,8 @@ func (r *ScanResult) NukiID() *nuki.NukiID {
 	}
 }
 
-type Info struct {
+// InfoResponse represents the result of an info request
+type InfoResponse struct {
 	BridgeType BridgeType `json:"bridgeType"`
 	IDs        struct {
 		HardwareID int `json:"hardwareId"`
@@ -38,8 +41,9 @@ type Info struct {
 	ScanResults     []ScanResult `json:"scanResults"`
 }
 
-func (c *Connection) Info() (*Info, error) {
-	var info Info
+// Info requests comprehensive information from the bridge
+func (c *Connection) Info() (*InfoResponse, error) {
+	var info InfoResponse
 	if err := c.get(c.hashedURL("info", nil), &info); err != nil {
 		return nil, fmt.Errorf("could not fetch bridge info: %w", err)
 	}

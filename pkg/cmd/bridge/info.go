@@ -9,15 +9,15 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
 
-func createInfoCommand() (*cobra.Command) {
+func createInfoCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "info",
 		Short: "Retrieve bridge info",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := nukibridge.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}
@@ -28,9 +28,9 @@ func createInfoCommand() (*cobra.Command) {
 			}
 
 			w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
-			fmt.Fprintln(w,"ID\tType\tName\tRSSI\tPaired")
+			_, _ = fmt.Fprintln(w, "ID\tType\tName\tRSSI\tPaired")
 			for _, result := range info.ScanResults {
-				fmt.Fprintf(w, "%d\t%d\t%s\t%d\t%t\n", result.ID, result.Type, result.Name, result.Rssi, result.Paired)
+				_, _ = fmt.Fprintf(w, "%d\t%d\t%s\t%d\t%t\n", result.ID, result.Type, result.Name, result.Rssi, result.Paired)
 			}
 			w.Flush()
 		},

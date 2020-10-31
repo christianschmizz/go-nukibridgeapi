@@ -6,6 +6,7 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+// LockResponse represents the result of an locking request
 type LockResponse struct {
 	Success         bool `json:"success"`
 	BatteryCritical bool `json:"batteryCritical"`
@@ -16,7 +17,7 @@ type lockOptions struct {
 	DeviceType nuki.DeviceType `url:"deviceType"`
 }
 
-// Send the simple lock action "lock" to a given Nuki device
+// Lock sends a simple lock action "lock" to the given device
 func (c *Connection) Lock(nukiID nuki.NukiID, options ...func(*lockOptions)) (*LockResponse, error) {
 	o := &lockOptions{nukiID.DeviceID, nukiID.DeviceType}
 	for _, opt := range options {

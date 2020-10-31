@@ -18,12 +18,15 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+// Connection holds all information required for communication with a bridge
 type Connection struct {
 	bridgeHost string
 	token      string
 	scan       map[nuki.NukiID]*ScanResult
 }
 
+// ScanOnConnect may be used as an options when connection and requests
+// scanning info from the bridge on creation of the connection.
 func ScanOnConnect() func(*Connection) {
 	return func(c *Connection) {
 		info, err := c.Info()
@@ -37,6 +40,7 @@ func ScanOnConnect() func(*Connection) {
 	}
 }
 
+// ConnectWithToken sets up a connection to the bridge using the given token for authentication
 func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*Connection, error) {
 	conn := &Connection{bridgeHost: bridgeHost, token: token, scan: map[nuki.NukiID]*ScanResult{}}
 	for _, opt := range options {
@@ -45,7 +49,8 @@ func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*
 	return conn, nil
 }
 
-func (c *Connection) hashedURL(p string, queryParams interface{}) string {
+// hashedURL generates a hashed URL
+func (c *Connection) hashedURL(path string, queryParams interface{}) string {
 	ts := time.Now().UTC().Format(time.RFC3339)
 	rnr := rand.Intn(1000)
 
@@ -54,7 +59,7 @@ func (c *Connection) hashedURL(p string, queryParams interface{}) string {
 	h.Write([]byte(fmt.Sprintf("%s,%d,%s", ts, rnr, c.token)))
 	hash := hex.EncodeToString(h.Sum(nil))
 
-	u := url.URL{Scheme: "http", Host: c.bridgeHost, Path: p}
+	u := url.URL{Scheme: "http", Host: c.bridgeHost, Path: path}
 
 	// Put all the details at the query string and re-add it to the URL
 	q := u.Query()

@@ -13,11 +13,11 @@ import (
 )
 
 func TestDecode_ListPairedDevicesResponse(t *testing.T) {
-	listJson, err := ioutil.ReadFile(filepath.Join("testdata", "list.json"))
+	listJSON, err := ioutil.ReadFile(filepath.Join("testdata", "list.json"))
 	assert.NoError(t, err)
 
 	var reso nukibridge.ListPairedDevicesResponse
-	err = json.Unmarshal(listJson, &reso)
+	err = json.Unmarshal(listJSON, &reso)
 	assert.NoError(t, err)
 
 	ts, err := time.Parse(time.RFC3339, "2020-01-30T20:00:00+00:00")

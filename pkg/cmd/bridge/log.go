@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
 )
 
 func createLogCommand() *cobra.Command {
@@ -18,7 +18,7 @@ func createLogCommand() *cobra.Command {
 		Use:   "log",
 		Short: "Log entries",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := nukibridge.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}
@@ -40,12 +40,12 @@ func createLogCommand() *cobra.Command {
 	return cmd
 }
 
-func printLog(writer io.Writer, logLines nukibridge.Log) {
+func printLog(writer io.Writer, logLines api.Log) {
 	w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
 	defer w.Flush()
 
-	fmt.Fprintln(w, "Time\tID\tType\tHandle\tMac address")
+	_, _ = fmt.Fprintln(w, "Time\tID\tType\tHandle\tMac address")
 	for _, l := range logLines {
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n", l.Timestamp.UTC(), l.ID, l.Type, l.BleHandle, l.MacAddr)
+		_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n", l.Timestamp.UTC(), l.ID, l.Type, l.BleHandle, l.MacAddr)
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// LogEntry is a single logging item from the bridge
 type LogEntry struct {
 	Timestamp time.Time `json:"timestamp"`
 	Type      string    `json:"type"`
@@ -15,6 +16,7 @@ type LogEntry struct {
 	Bytes     int       `json:"bytes,omitempty"`
 }
 
+// Log is a group of logging items
 type Log []LogEntry
 
 type logOptions struct {
@@ -22,6 +24,7 @@ type logOptions struct {
 	Count  int `url:"count"`
 }
 
+// Log fetches the given number of logs from the bridge starting with the given offset.
 func (c *Connection) Log(offset, count int) (Log, error) {
 	options := logOptions{offset, count}
 	var log Log

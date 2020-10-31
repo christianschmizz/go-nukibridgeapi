@@ -1,16 +1,25 @@
 package bridge
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
 var (
-	Host  string
+	// Host is the address and port of the bridge (e.g. "192.168.0.1:8080")
+	Host string
+
+	// Token is the Auth token required for accessing the bridge's API
 	Token string
 )
 
+// CreateCommand creates the "bridge" command group
 func CreateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "bridge",
@@ -47,4 +56,19 @@ func CreateCommand() *cobra.Command {
 	cmd.AddCommand(callbacks)
 
 	return cmd
+}
+
+// resolveNukiIDFromArgs assembles an ID from the first two args
+func resolveNukiIDFromArgs(args []string) (*nuki.NukiID, error) {
+	deviceType, err := strconv.Atoi(args[0])
+	if err != nil {
+		return nil, fmt.Errorf("invalid device's type: %v", args[0])
+	}
+
+	deviceID, err := strconv.Atoi(args[1])
+	if err != nil {
+		return nil, fmt.Errorf("invalid device's ID: %v", args[1])
+	}
+
+	return &nuki.NukiID{DeviceID: deviceID, DeviceType: nuki.DeviceType(deviceType)}, nil
 }

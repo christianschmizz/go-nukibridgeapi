@@ -7,6 +7,7 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+// LockStateResponse contains the response results from the respective API call
 type LockStateResponse struct {
 	Mode                  int       `json:"mode"`
 	State                 int       `json:"state"`
@@ -25,7 +26,7 @@ type lockStateOptions struct {
 	DeviceType nuki.DeviceType `url:"deviceType"`
 }
 
-// Retrieves and returns the current lock state of a given Nuki device
+// LockState retrieves the current state of the given device
 func (c *Connection) LockState(nukiID nuki.NukiID) (*LockStateResponse, error) {
 	options := &lockStateOptions{nukiID.DeviceID, nukiID.DeviceType}
 

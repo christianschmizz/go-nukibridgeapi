@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// getGoldenFile returns the golden file content. If the `update` is specified, it updates the
+// GetGoldenFile returns the golden file content. If the `update` is specified, it updates the
 // file with the current output and returns it.
 func GetGoldenFile(t *testing.T, actual []byte, fileName string, update bool) []byte {
 	golden := filepath.Join("testdata", fileName)
