@@ -14,10 +14,10 @@ endif
 ECHO := @echo
 
 CGO_ENABLED ?= 0
-GOOS ?= darwin
-GOARCH ?= amd64
+GOOS := $(shell go env GOOS)
+GOARCH := $(shell go env GOARCH)
 
-BINARY_NAME = nukibridgectl
+BINARY_NAME := nukibridgectl
 BINARY_NAME_LINUX = $(BINARY_NAME)-linux-$(GOARCH)
 BINARY_NAME_WINDOWS = $(BINARY_NAME)-windows-$(GOARCH)
 BINARY_NAME_DARWIN = $(BINARY_NAME)-darwin-$(GOARCH)
@@ -58,12 +58,15 @@ build-static-darwin:
 build-static: build-static-darwin build-static-linux build-static-windows
 
 .PHONY: build
-build:
+build: | checkdeps lint test
+	@echo "Building $(BINARY_NAME)"
 	$(Q)go build $(BUILD_FLAGS) -o "$(BINARY_NAME)-$(GOOS)-$(GOARCH)" $(COMMAND)
 
 .PHONY: install
 install:
+	$(ECHO) "Installing $(BINARY_NAME) binary to '$(GOPATH)/bin/$(BINARY_NAME)'"
 	$(Q)go install $(BUILD_FLAGS) $(COMMAND)
+	$(ECHO) "Installation successful. To learn more, try \"$(BINARY_NAME) --help\"."
 
 .PHONY: test
 test:
@@ -72,6 +75,26 @@ test:
 .PHONY: integration-test
 integration-test:
 	$(Q)go test -v ./... -failfast -tags=integration -args -host $(BRIDGE_HOST) -token $(BRIDGE_TOKEN)
+
+.PHONY:
+checkdeps:
+	@echo "Checking dependencies"
+ifeq ($(shell which golangci-lint),)
+	$(ECHO) Installing golangci-lint
+ifeq ($(shell which brew),)
+	$(Q)brew install golangci/tap/golangci-lint
+else
+	$(Q)mkdir -p ${GOPATH}/bin
+	$(Q)curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
+endif
+endif
+
+.PHONY: lint
+lint:
+# see https://github.com/golangci/golangci-lint/issues/1040
+	$(ECHO) "Running $@ check"
+	@GO111MODULE=on ${GOPATH}/bin/golangci-lint cache clean
+	@GO111MODULE=on ${GOPATH}/bin/golangci-lint run --timeout=5m --config ./.golangci.yml
 
 .PHONY: version
 version:
