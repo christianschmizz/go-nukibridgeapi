@@ -59,7 +59,7 @@ func CreateCommand() *cobra.Command {
 }
 
 // resolveNukiIDFromArgs assembles an ID from the first two args
-func resolveNukiIDFromArgs(args []string) (*nuki.NukiID, error) {
+func resolveNukiIDFromArgs(args []string) (*nuki.ID, error) {
 	deviceType, err := strconv.Atoi(args[0])
 	if err != nil {
 		return nil, fmt.Errorf("invalid device's type: %v", args[0])
@@ -70,5 +70,5 @@ func resolveNukiIDFromArgs(args []string) (*nuki.NukiID, error) {
 		return nil, fmt.Errorf("invalid device's ID: %v", args[1])
 	}
 
-	return &nuki.NukiID{DeviceID: deviceID, DeviceType: nuki.DeviceType(deviceType)}, nil
+	return &nuki.ID{DeviceID: deviceID, DeviceType: nuki.DeviceType(deviceType)}, nil
 }

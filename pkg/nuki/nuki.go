@@ -30,10 +30,10 @@ type LockMode int
 // DoorsensorState describes the state of a doorsensor
 type DoorsensorState int
 
-// The NukiID is a unique identifier over all Nuki devices. The numeric ID is
+// The ID is a unique identifier over all Nuki devices. The numeric ID is
 // not unique between products, e.g. a smart lock's ID may collide with an
 // opener ID.
-type NukiID struct {
+type ID struct {
 	DeviceID   int
 	DeviceType DeviceType
 }
@@ -63,7 +63,7 @@ const (
 	// SmartLockStateUnlocked means the door at the smart lock is currently unlocked
 	SmartLockStateUnlocked LockState = 3
 
-	// SmartLockStateUnlocking means the smart lock is currently in the progress of locking the door
+	// SmartLockStateLocking means the smart lock is currently in the progress of locking the door
 	SmartLockStateLocking LockState = 4
 
 	// SmartLockStateUnlatched means the door at the smart lock us currently not closed
@@ -72,7 +72,7 @@ const (
 	// SmartLockStateUnlockedLockAndGo means the door is currently unlocked and Lock and Go is active
 	SmartLockStateUnlockedLockAndGo LockState = 6
 
-	// SmartLockStateUnlatched means the smart lock is currently in the progress of unlatching the door
+	// SmartLockStateUnlatching means the smart lock is currently in the progress of unlatching the door
 	SmartLockStateUnlatching LockState = 7
 
 	// SmartLockStateMotorBlocked means the smart lock cannot rotate the key anymore

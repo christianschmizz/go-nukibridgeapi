@@ -49,7 +49,7 @@ func TestConnection_LockState(t *testing.T) {
 	})
 
 	t.Run("read lock's state", func(t *testing.T) {
-		id := nuki.NukiID{DeviceID: devices[0].ID, DeviceType: nuki.DeviceType(devices[0].Type)}
+		id := nuki.ID{DeviceID: devices[0].ID, DeviceType: nuki.DeviceType(devices[0].Type)}
 		result, err := conn.LockState(id)
 		assert.NoError(t, err)
 		assert.True(t, result.Success)

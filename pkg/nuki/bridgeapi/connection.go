@@ -22,7 +22,7 @@ import (
 type Connection struct {
 	bridgeHost string
 	token      string
-	scan       map[nuki.NukiID]*ScanResult
+	scan       map[nuki.ID]*ScanResult
 }
 
 // ScanOnConnect may be used as an options when connection and requests
@@ -42,7 +42,7 @@ func ScanOnConnect() func(*Connection) {
 
 // ConnectWithToken sets up a connection to the bridge using the given token for authentication
 func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*Connection, error) {
-	conn := &Connection{bridgeHost: bridgeHost, token: token, scan: map[nuki.NukiID]*ScanResult{}}
+	conn := &Connection{bridgeHost: bridgeHost, token: token, scan: map[nuki.ID]*ScanResult{}}
 	for _, opt := range options {
 		opt(conn)
 	}
@@ -92,7 +92,7 @@ func (c *Connection) get(url string, o interface{}) error {
 	return nil
 }
 
-func (c *Connection) isKnown(nukiID nuki.NukiID) (*ScanResult, bool) {
+func (c *Connection) isKnown(nukiID nuki.ID) (*ScanResult, bool) {
 	if len(c.scan) == 0 {
 		return nil, false
 	}

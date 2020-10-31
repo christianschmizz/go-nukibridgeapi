@@ -18,7 +18,7 @@ type unlockOptions struct {
 }
 
 // Unlock sends a simple lock action "lock" to the given device
-func (c *Connection) Unlock(nukiID nuki.NukiID, options ...func(*unlockOptions)) (*UnlockResponse, error) {
+func (c *Connection) Unlock(nukiID nuki.ID, options ...func(*unlockOptions)) (*UnlockResponse, error) {
 	o := &unlockOptions{nukiID.DeviceID, nukiID.DeviceType}
 	for _, opt := range options {
 		opt(o)

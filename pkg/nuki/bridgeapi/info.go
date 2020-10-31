@@ -17,8 +17,8 @@ type ScanResult struct {
 }
 
 // NukiID assembles the ID from a result
-func (r *ScanResult) NukiID() *nuki.NukiID {
-	return &nuki.NukiID{
+func (r *ScanResult) NukiID() *nuki.ID {
+	return &nuki.ID{
 		DeviceID:   r.ID,
 		DeviceType: r.Type,
 	}
