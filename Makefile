@@ -41,6 +41,8 @@ ifeq ($(BUILD_VERBOSE),1)
 	BUILD_FLAGS_STATIC += -v
 endif
 
+all: | clean checkdeps lint test build
+
 .PHONY: build-static-linux
 build-static-linux:
 	$(ECHO) building $@
@@ -62,7 +64,7 @@ build-static:
 	$(Q)go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_DARWIN)-static" $(COMMAND)
 
 .PHONY: build
-build: | clean checkdeps lint test
+build: clean
 	@echo "Building $(BINARY_NAME)"
 	$(Q)go build $(BUILD_FLAGS) -o "$(BINARY_NAME)-$(GOOS)-$(GOARCH)" $(COMMAND)
 
