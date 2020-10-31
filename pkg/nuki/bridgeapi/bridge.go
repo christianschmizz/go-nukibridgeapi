@@ -1,4 +1,4 @@
-package bridge
+package bridgeapi
 
 // BridgeType describes the type of a bridge
 type BridgeType int

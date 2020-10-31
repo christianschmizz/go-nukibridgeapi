@@ -1,6 +1,6 @@
 // +build integration
 
-package bridge_test
+package bridgeapi_test
 
 import (
 	"testing"

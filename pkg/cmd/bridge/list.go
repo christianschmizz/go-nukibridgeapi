@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createListCommand() *cobra.Command {
@@ -18,7 +18,7 @@ func createListCommand() *cobra.Command {
 		Use:   "list",
 		Short: "List paired devices",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("")
 			}
@@ -34,7 +34,7 @@ func createListCommand() *cobra.Command {
 	return cmd
 }
 
-func printDeviceList(writer io.Writer, devices api.ListPairedDevicesResponse) {
+func printDeviceList(writer io.Writer, devices bridgeapi.ListPairedDevicesResponse) {
 	w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
 	defer w.Flush()
 

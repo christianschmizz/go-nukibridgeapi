@@ -1,20 +1,20 @@
 // +build integration
 
-package bridge_test
+package bridgeapi_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func TestConnection_Info(t *testing.T) {
 	conn := bridgeConn(t, *host, *token)
 	info, err := conn.Info()
 	if assert.NoError(t, err) {
-		assert.Equal(t, nukibridge.TypeHardware, info.BridgeType)
+		assert.Equal(t, bridgeapi.TypeHardware, info.BridgeType)
 		assert.Len(t, info.ScanResults, 2)
 	}
 }

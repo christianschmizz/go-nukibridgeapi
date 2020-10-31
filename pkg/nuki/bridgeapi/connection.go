@@ -1,4 +1,4 @@
-package bridge
+package bridgeapi
 
 import (
 	"crypto/sha256"

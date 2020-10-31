@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createInfoCommand() *cobra.Command {
@@ -17,7 +17,7 @@ func createInfoCommand() *cobra.Command {
 		Use:   "info",
 		Short: "Retrieve bridge info",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}

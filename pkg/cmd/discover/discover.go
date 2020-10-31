@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 // CreateCommand create the "discover" command
@@ -18,7 +18,7 @@ func CreateCommand() *cobra.Command {
 		Use:   "discover",
 		Short: "Discover bridges",
 		Run: func(cmd *cobra.Command, args []string) {
-			discovery, err := nukibridge.Discover()
+			discovery, err := bridgeapi.Discover()
 			if err != nil {
 				log.Fatal().Err(err).Msg("discovery failed")
 			}
@@ -31,7 +31,7 @@ func CreateCommand() *cobra.Command {
 	return discoverCmd
 }
 
-func printBridges(writer io.Writer, bridges []nukibridge.BridgeInfo) {
+func printBridges(writer io.Writer, bridges []bridgeapi.BridgeInfo) {
 	w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
 	fmt.Fprintln(w, "ID\tIP\tPort\tUpdated")
 	for _, bridge := range bridges {

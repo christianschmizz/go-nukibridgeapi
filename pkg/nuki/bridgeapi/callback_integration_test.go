@@ -1,13 +1,13 @@
 // +build integration
 
-package bridge_test
+package bridgeapi_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func Test_CallbackHandling(t *testing.T) {
@@ -15,10 +15,10 @@ func Test_CallbackHandling(t *testing.T) {
 
 	var (
 		err                   error
-		addCallbackResponse   *bridge.AddCallbackResponse
-		listCallbacksResponse *bridge.ListCallbacksResponse
-		firstCallback         bridge.Callback
-		secondCallback        bridge.Callback
+		addCallbackResponse   *bridgeapi.AddCallbackResponse
+		listCallbacksResponse *bridgeapi.ListCallbacksResponse
+		firstCallback         bridgeapi.Callback
+		secondCallback        bridgeapi.Callback
 	)
 
 	t.Run("Add first callback", func(t *testing.T) {

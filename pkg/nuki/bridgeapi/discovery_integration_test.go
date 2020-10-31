@@ -1,17 +1,17 @@
 // +build integration
 
-package bridge_test
+package bridgeapi_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func TestDiscover(t *testing.T) {
-	d, err := nukibridge.Discover()
+	d, err := bridgeapi.Discover()
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, d.ErrorCode)
 	}

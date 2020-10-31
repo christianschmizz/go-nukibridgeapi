@@ -1,6 +1,6 @@
 // +build integration
 
-package bridge_test
+package bridgeapi_test
 
 import (
 	"flag"
@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 var (
@@ -17,15 +17,11 @@ var (
 	token = flag.String("token", "", "")
 )
 
-func bridgeConn(t *testing.T, host, token string) *nukibridge.Connection {
+func bridgeConn(t *testing.T, host, token string) *bridgeapi.Connection {
 	t.Logf("args: %s", strings.Join(flag.Args(), " "))
 	t.Logf("test.timeout: %v", flag.Lookup("test.timeout").Value)
 
-	conn, err := nukibridge.ConnectWithToken(host, token)
+	conn, err := bridgeapi.ConnectWithToken(host, token)
 	assert.NoError(t, err)
 	return conn
-}
-
-func init() {
-	//flag.Parse()
 }

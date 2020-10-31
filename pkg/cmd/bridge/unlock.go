@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createUnlockCommand() *cobra.Command {
@@ -21,7 +21,7 @@ func createUnlockCommand() *cobra.Command {
 				log.Fatal().Err(err).Msg("failed to resolve nukiID from args")
 			}
 
-			conn, err := nukibridge.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}

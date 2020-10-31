@@ -1,6 +1,6 @@
 // +build integration
 
-package bridge_test
+package bridgeapi_test
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func TestConnection_LockAction(t *testing.T) {
@@ -16,8 +16,8 @@ func TestConnection_LockAction(t *testing.T) {
 
 	var (
 		err error
-		i   *bridge.InfoResponse
-		r   bridge.ScanResult
+		i   *bridgeapi.InfoResponse
+		r   bridgeapi.ScanResult
 	)
 
 	t.Run("fetch info", func(t *testing.T) {
@@ -28,7 +28,7 @@ func TestConnection_LockAction(t *testing.T) {
 	})
 
 	t.Run("deactivate rto", func(t *testing.T) {
-		result, err := conn.LockAction(*r.NukiID(), nuki.OpenerLockActionDeactivateRto, bridge.Wait())
+		result, err := conn.LockAction(*r.NukiID(), nuki.OpenerLockActionDeactivateRto, bridgeapi.Wait())
 		assert.NoError(t, err)
 		assert.True(t, result.Success)
 	})
@@ -39,7 +39,7 @@ func TestConnection_LockState(t *testing.T) {
 
 	var (
 		err     error
-		devices bridge.ListPairedDevicesResponse
+		devices bridgeapi.ListPairedDevicesResponse
 	)
 
 	t.Run("fetch list of paired devices", func(t *testing.T) {

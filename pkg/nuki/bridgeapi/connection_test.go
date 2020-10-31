@@ -1,13 +1,13 @@
-package bridge_test
+package bridgeapi_test
 
 import (
 	"fmt"
 
-	nukibridge "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func ExampleConnectWithToken() {
-	conn, err := nukibridge.ConnectWithToken("192.168.1.11:8080", "abcdef")
+	conn, err := bridgeapi.ConnectWithToken("192.168.1.11:8080", "abcdef")
 	if err != nil {
 		panic(err)
 	}
@@ -21,7 +21,7 @@ func ExampleConnectWithToken() {
 }
 
 func ExampleScanOnConnect() {
-	_, err := nukibridge.ConnectWithToken("192.168.1.11:8080", "abcdef", nukibridge.ScanOnConnect())
+	_, err := bridgeapi.ConnectWithToken("192.168.1.11:8080", "abcdef", bridgeapi.ScanOnConnect())
 	if err != nil {
 		panic(err)
 	}

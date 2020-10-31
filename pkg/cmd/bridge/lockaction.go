@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
-	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createLockActionCommand() *cobra.Command {
@@ -29,7 +29,7 @@ func createLockActionCommand() *cobra.Command {
 				log.Fatal().Err(err).Str("action", actionName).Msg("invalid action")
 			}
 
-			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}

@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	api "github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridge"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createCallbackListCommand() *cobra.Command {
@@ -18,7 +18,7 @@ func createCallbackListCommand() *cobra.Command {
 		Use:   "list",
 		Short: "List callbacks",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := api.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
+			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 			}
@@ -35,7 +35,7 @@ func createCallbackListCommand() *cobra.Command {
 	return cmd
 }
 
-func printCallbacks(writer io.Writer, callbacks []api.Callback) {
+func printCallbacks(writer io.Writer, callbacks []bridgeapi.Callback) {
 	if len(callbacks) > 0 {
 		w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
 		defer w.Flush()
