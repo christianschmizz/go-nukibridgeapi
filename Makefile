@@ -62,7 +62,7 @@ build-static:
 	$(Q)go build $(BUILD_FLAGS_STATIC) -o "$(BINARY_NAME_DARWIN)-static" $(COMMAND)
 
 .PHONY: build
-build: | checkdeps lint test
+build: | clean checkdeps lint test
 	@echo "Building $(BINARY_NAME)"
 	$(Q)go build $(BUILD_FLAGS) -o "$(BINARY_NAME)-$(GOOS)-$(GOARCH)" $(COMMAND)
 
@@ -103,3 +103,8 @@ lint:
 .PHONY: version
 version:
 	$(ECHO) $(VERSION)
+
+.PHONY: clean
+clean:
+	$(ECHO) "Cleaning up"
+	$(Q)find . -type f -name '$(BINARY_NAME)-*' -delete
