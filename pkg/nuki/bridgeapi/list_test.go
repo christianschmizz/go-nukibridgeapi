@@ -24,13 +24,15 @@ func TestDecode_ListPairedDevicesResponse(t *testing.T) {
 	assert.NoError(t, err)
 
 	expectedResponse := bridgeapi.ListPairedDevicesResponse{
-		{ID: 527875674, Type: 0, Name: "Eine Tür", LastKnownState: bridgeapi.LastKnownState{
+		{ID: 527875674, Type: 0, Name: "Eine Tür", FirmwareVersion: "2.8.15",
+			LastKnownState: bridgeapi.LastKnownState{
 			Mode: 2, State: 3, StateName: "unlocked", BatteryCritical: false,
 			BatteryCharging: false, BatteryChargeState: 100, KeypadBatteryCritical: false,
 			DoorsensorState: 2, DoorsensorStateName: "door closed", RingactionState: false,
 			RingactionTimestamp: time.Time{}, Timestamp: ts},
 		},
-		{ID: 519611324, Type: 2, Name: "Andere Tür", LastKnownState: bridgeapi.LastKnownState{
+		{ID: 519611324, Type: 2, Name: "Andere Tür", FirmwareVersion: "1.5.3",
+			LastKnownState: bridgeapi.LastKnownState{
 			Mode: 2, State: 1, StateName: "online", BatteryCritical: false,
 			BatteryCharging: false, BatteryChargeState: 0, KeypadBatteryCritical: false,
 			DoorsensorState: 0, DoorsensorStateName: "", RingactionState: false,
