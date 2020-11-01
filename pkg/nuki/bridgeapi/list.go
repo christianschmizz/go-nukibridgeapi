@@ -25,10 +25,11 @@ type LastKnownState struct {
 
 // DeviceInfo describes some basic information of a device
 type DeviceInfo struct {
-	ID             int             `json:"nukiId"`
-	Type           nuki.DeviceType `json:"deviceType"`
-	Name           string          `json:"name"`
-	LastKnownState LastKnownState  `json:"lastKnownState"`
+	ID              int             `json:"nukiId"`
+	Type            nuki.DeviceType `json:"deviceType"`
+	Name            string          `json:"name"`
+	FirmwareVersion string          `json:"firmwareVersion"`
+	LastKnownState  LastKnownState  `json:"lastKnownState"`
 }
 
 // ListPairedDevicesResponse represents the results of querying the paired devices
