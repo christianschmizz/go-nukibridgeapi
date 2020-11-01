@@ -41,7 +41,7 @@ func createLockActionCommand() *cobra.Command {
 			fmt.Printf("%+v\n", state)
 		},
 	}
-	cmd.Flags().BoolVarP(&NoWait, "nowait", "n", true, "Wait until command finished")
+	cmd.Flags().BoolVarP(&NoWait, "nowait", "n", true, "Don't wait until the command finished")
 
 	return cmd
 }
