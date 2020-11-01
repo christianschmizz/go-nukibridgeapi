@@ -40,9 +40,9 @@ func printCallbacks(writer io.Writer, callbacks []bridgeapi.Callback) {
 		w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
 		defer w.Flush()
 
-		fmt.Fprintln(w, "ID\tURL")
+		_, _ = fmt.Fprintln(w, "ID\tURL")
 		for _, callback := range callbacks {
-			fmt.Fprintf(w, "%d\t%s\n", callback.ID, callback.URL)
+			_, _ = fmt.Fprintf(w, "%d\t%s\n", callback.ID, callback.URL)
 		}
 	} else {
 		fmt.Println("no callbacks found")
