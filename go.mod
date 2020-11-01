@@ -3,6 +3,8 @@ module github.com/christianschmizz/go-nukibridgeapi
 go 1.15
 
 require (
+	github.com/godbus/dbus/v5 v5.0.3
+	github.com/google/go-cmp v0.3.0
 	github.com/google/go-querystring v1.0.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.9.1

@@ -47,6 +47,7 @@ func CreateCommand() *cobra.Command {
 	cmd.AddCommand(createLockCommand())
 	cmd.AddCommand(createUnlockCommand())
 	// cmd.AddCommand(createUnpairCommand())
+	cmd.AddCommand(createWatchCommand())
 
 	callbacks := &cobra.Command{Use: "callbacks", Short: "Callback management"}
 	callbacks.AddCommand(createCallbackListCommand())
