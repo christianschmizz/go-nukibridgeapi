@@ -23,20 +23,23 @@ func createLockActionCommand() *cobra.Command {
 				log.Fatal().Err(err).Msg("failed to resolve nukiID from args")
 			}
 
-			actionName := args[1]
-			action, err := nuki.SmartLockActionFromString(actionName)
+			actionName := args[2]
+			action, err := nuki.LockActionFromString(actionName, nukiID.DeviceType)
 			if err != nil {
 				log.Fatal().Err(err).Str("action", actionName).Msg("invalid action")
 			}
 
 			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
 			if err != nil {
-				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
+				log.Fatal().Err(err).Msg("failed to connect to bridge")
 			}
 
 			state, err := conn.LockAction(*nukiID, action)
 			if err != nil {
-				log.Fatal().Err(err).Msg("")
+				log.Error().Err(err).Msg("failed to issue request")
+			}
+			if !state.Success {
+				log.Error().Err(err).Msg("was not successful")
 			}
 			fmt.Printf("%+v\n", state)
 		},
