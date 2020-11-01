@@ -2,6 +2,7 @@ package bridge
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"text/tabwriter"
 
@@ -27,14 +28,18 @@ func createInfoCommand() *cobra.Command {
 				log.Fatal().Err(err).Msg("failed to retrieve info from Nuki bridge")
 			}
 
-			w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
-			_, _ = fmt.Fprintln(w, "ID\tType\tName\tRSSI\tPaired")
-			for _, result := range info.ScanResults {
-				_, _ = fmt.Fprintf(w, "%d\t%d\t%s\t%d\t%t\n", result.ID, result.Type, result.Name, result.Rssi, result.Paired)
-			}
-			w.Flush()
+			printScanResults(os.Stdout, info.ScanResults)
 		},
 	}
 
 	return cmd
+}
+
+func printScanResults(writer io.Writer, results []bridgeapi.ScanResult) {
+	w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
+	_, _ = fmt.Fprintln(w, "ID\tType\tName\tRSSI\tPaired")
+	for _, result := range results {
+		_, _ = fmt.Fprintf(w, "%d\t%d\t%s\t%d\t%t\n", result.ID, result.Type, result.Name, result.Rssi, result.Paired)
+	}
+	w.Flush()
 }
