@@ -161,7 +161,7 @@ const (
 	DoorsensorStateCalibrating DoorsensorState = 5
 )
 
-// SmartLockActionFromString retrieves the appropriate action from a string
+// SmartLockActionFromString retrieves the appropriate action for a smart lock from a string
 func SmartLockActionFromString(s string) (e LockAction, err error) {
 	switch strings.ToLower(s) {
 	case "unlock":
@@ -176,6 +176,38 @@ func SmartLockActionFromString(s string) (e LockAction, err error) {
 		e = SmartLockActionLockAndGoWithUnlatch
 	default:
 		err = fmt.Errorf("unknown smart lock action: %s", s)
+	}
+	return
+}
+
+// OpenerLockActionFromString retrieves the appropriate action for an opener from a string
+func OpenerLockActionFromString(s string) (e LockAction, err error) {
+	switch strings.ToLower(s) {
+	case "rto_on":
+		e = OpenerLockActionActivateRto
+	case "rto_off":
+		e = OpenerLockActionDeactivateRto
+	case "esa":
+		e = OpenerLockActionElectricStrikeActuation
+	case "cm_on":
+		e = OpenerLockActionActivateContinuousMode
+	case "cm_off":
+		e = OpenerLockActionDeactivateContinuousMode
+	default:
+		err = fmt.Errorf("unknown opener action: %s", s)
+	}
+	return
+}
+
+// LockActionFromString retrieves the appropriate action for a device type from a string
+func LockActionFromString(s string, t DeviceType) (action LockAction, err error) {
+	switch t {
+	case SmartLock:
+		action, err = SmartLockActionFromString(s)
+	case Opener:
+		action, err = OpenerLockActionFromString(s)
+	default:
+		err = fmt.Errorf("unknown device type: %s", s)
 	}
 	return
 }
