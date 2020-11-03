@@ -1,7 +1,7 @@
 package bridgeapi
 
 import (
-	"fmt"
+	"net/http"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
@@ -19,14 +19,30 @@ type unlockOptions struct {
 
 // Unlock sends a simple lock action "lock" to the given device
 func (c *Connection) Unlock(nukiID nuki.ID, options ...func(*unlockOptions)) (*UnlockResponse, error) {
-	o := &unlockOptions{nukiID.DeviceID, nukiID.DeviceType}
+	o := &unlockOptions{
+		DeviceID:   nukiID.DeviceID,
+		DeviceType: nukiID.DeviceType,
+	}
 	for _, opt := range options {
 		opt(o)
 	}
 
-	var response UnlockResponse
-	if err := c.get(c.hashedURL("unlock", o), &response); err != nil {
-		return nil, fmt.Errorf("could not execute lock: %w", err)
+	resp, err := c.request("unlock", nil)
+	if err != nil {
+		return nil, err
 	}
-	return &response, nil
+
+	if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	} else if resp.Is(http.StatusNotFound) {
+		return nil, ErrUnknownDevice
+	} else if resp.Is(http.StatusServiceUnavailable) {
+		return nil, ErrDeviceOffline
+	}
+
+	var data UnlockResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return &data, nil
 }

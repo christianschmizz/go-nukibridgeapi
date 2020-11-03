@@ -11,7 +11,7 @@ import (
 )
 
 func TestConnection_Info(t *testing.T) {
-	conn := bridgeConn(t, *host, *token)
+	conn := bridgeConn(t)
 	info, err := conn.Info()
 	if assert.NoError(t, err) {
 		assert.Equal(t, bridgeapi.TypeHardware, info.BridgeType)

@@ -1,7 +1,7 @@
 package bridgeapi
 
 import (
-	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
@@ -28,11 +28,27 @@ type lockStateOptions struct {
 
 // LockState retrieves the current state of the given device
 func (c *Connection) LockState(nukiID nuki.ID) (*LockStateResponse, error) {
-	options := &lockStateOptions{nukiID.DeviceID, nukiID.DeviceType}
-
-	var response LockStateResponse
-	if err := c.get(c.hashedURL("lockState", options), &response); err != nil {
-		return nil, fmt.Errorf("could not fetch lockState: %w", err)
+	options := &lockStateOptions{
+		DeviceID:   nukiID.DeviceID,
+		DeviceType: nukiID.DeviceType,
 	}
-	return &response, nil
+
+	resp, err := c.request("lockState", options)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	} else if resp.Is(http.StatusNotFound) {
+		return nil, ErrUnknownDevice
+	} else if resp.Is(http.StatusServiceUnavailable) {
+		return nil, ErrDeviceOffline
+	}
+
+	var data LockStateResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return &data, nil
 }

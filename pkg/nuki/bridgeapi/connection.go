@@ -3,7 +3,7 @@ package bridgeapi
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
+	"errors"
 	"fmt"
 	"math/rand"
 	"net"
@@ -19,8 +19,27 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+var (
+	ErrInvalidToken  = errors.New("token is invalid or a hashed token parameter is missing")
+	ErrUnknownDevice = errors.New("the given Nuki device is unknown")
+	ErrDeviceOffline = errors.New("the given Nuki device is offline")
+	ErrInvalidURL    = errors.New("the given URL is invalid or too long")
+)
+
+type InvalidActionError struct {
+	Action nuki.LockAction
+}
+
+func (e *InvalidActionError) Error() string { return fmt.Sprintf("action %d is invalid", e.Action) }
+
+// HTTPClient interface
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 // Connection holds all information required for communication with a bridge
 type Connection struct {
+	client     HTTPClient
 	bridgeHost string
 	token      string
 	scan       map[nuki.ID]*ScanResult
@@ -38,6 +57,13 @@ func ScanOnConnect() func(*Connection) {
 		for _, r := range info.ScanResults {
 			c.scan[*r.NukiID()] = &r
 		}
+	}
+}
+
+// UseClient uses the given client
+func UseClient(client HTTPClient) func(*Connection) {
+	return func(c *Connection) {
+		c.client = client
 	}
 }
 
@@ -61,9 +87,18 @@ func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*
 		return nil, fmt.Errorf("invalid bridge host %s: %w", bridgeHost, err)
 	}
 
-	conn := &Connection{bridgeHost: bridgeHost, token: token, scan: map[nuki.ID]*ScanResult{}}
+	conn := &Connection{
+		bridgeHost: bridgeHost,
+		token:      token,
+		scan:       map[nuki.ID]*ScanResult{},
+	}
 	for _, opt := range options {
 		opt(conn)
+	}
+	if conn.client == nil {
+		conn.client = &http.Client{
+			Timeout: time.Duration(10) * time.Second,
+		}
 	}
 	return conn, nil
 }
@@ -97,18 +132,25 @@ func (c *Connection) hashedURL(path string, queryParams interface{}) string {
 	return u.String()
 }
 
-func (c *Connection) get(url string, o interface{}) error {
-	log.Debug().Str("url", url).Msg("calling bridge API")
-	resp, err := http.Get(url)
+func (c *Connection) request(path string, queryParams interface{}) (*apiResponse, error) {
+	requestURL := c.hashedURL(path, queryParams)
+	request, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
-		return err
+		return nil, err
+	}
+
+	log.Debug().Str("url", requestURL).Msg("requesting")
+	resp, err := c.client.Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("requesting '%s' failed: %w", path, err)
 	}
 	defer resp.Body.Close()
 
-	if err := json.NewDecoder(resp.Body).Decode(&o); err != nil {
-		return fmt.Errorf("could not decode response: %w\n\n%+v", err, resp.Body)
+	r, err := NewApiResponse(resp)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+	return r, nil
 }
 
 func (c *Connection) isKnown(nukiID nuki.ID) (*ScanResult, bool) {

@@ -9,7 +9,7 @@ import (
 )
 
 func TestSession_ListPairedDevices(t *testing.T) {
-	conn := bridgeConn(t, *host, *token)
+	conn := bridgeConn(t)
 	devices, err := conn.ListPairedDevices()
 	if assert.NoError(t, err) {
 		assert.Len(t, devices, 2)

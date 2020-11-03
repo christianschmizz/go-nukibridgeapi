@@ -1,7 +1,7 @@
 package bridgeapi
 
 import (
-	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
@@ -37,9 +37,18 @@ type ListPairedDevicesResponse []DeviceInfo
 
 // ListPairedDevices retrieves a list of all devices paired with the bridge
 func (c *Connection) ListPairedDevices() (ListPairedDevicesResponse, error) {
-	var response ListPairedDevicesResponse
-	if err := c.get(c.hashedURL("list", nil), &response); err != nil {
-		return nil, fmt.Errorf("could not fetch list of paired scan: %w", err)
+	resp, err := c.request("list", nil)
+	if err != nil {
+		return nil, err
 	}
-	return response, nil
+
+	if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	}
+
+	var data ListPairedDevicesResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }

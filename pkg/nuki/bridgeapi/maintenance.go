@@ -1,7 +1,7 @@
 package bridgeapi
 
 import (
-	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -14,6 +14,8 @@ type LogEntry struct {
 	BleHandle string    `json:"bleHandle,omitempty"`
 	MacAddr   string    `json:"macAddr,omitempty"`
 	Bytes     int       `json:"bytes,omitempty"`
+	Count     int       `json:"count,omitempty"`
+	ServerNum int       `json:"serverNum,omitempty"`
 }
 
 // Log is a group of logging items
@@ -26,10 +28,23 @@ type logOptions struct {
 
 // Log fetches the given number of logs from the bridge starting with the given offset.
 func (c *Connection) Log(offset, count int) (Log, error) {
-	options := logOptions{offset, count}
-	var log Log
-	if err := c.get(c.hashedURL("log", options), &log); err != nil {
-		return nil, fmt.Errorf("could not fetch logs: %w", err)
+	options := &logOptions{
+		Offset: offset,
+		Count:  count,
 	}
-	return log, nil
+
+	resp, err := c.request("log", options)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	}
+
+	var data Log
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }

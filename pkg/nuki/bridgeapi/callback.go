@@ -1,7 +1,7 @@
 package bridgeapi
 
 import (
-	"fmt"
+	"net/http"
 )
 
 // Callback is an item at the list of callbacks at a bridge
@@ -17,11 +17,20 @@ type ListCallbacksResponse struct {
 
 // ListCallbacks request a list of registered callbacks from the bridge
 func (c *Connection) ListCallbacks() (*ListCallbacksResponse, error) {
-	var response ListCallbacksResponse
-	if err := c.get(c.hashedURL("/callback/list", nil), &response); err != nil {
-		return nil, fmt.Errorf("could not fetch list of callbacks: %w", err)
+	resp, err := c.request("/callback/list", nil)
+	if err != nil {
+		return nil, err
 	}
-	return &response, nil
+
+	if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	}
+
+	var data ListCallbacksResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return &data, nil
 }
 
 // RemoveCallbackResponse represents the result of an callback removal request
@@ -35,11 +44,23 @@ func (c *Connection) RemoveCallback(callbackID int) (*RemoveCallbackResponse, er
 	options := &struct {
 		CallbackID int `url:"id"`
 	}{callbackID}
-	var response RemoveCallbackResponse
-	if err := c.get(c.hashedURL("/callback/remove", options), &response); err != nil {
-		return nil, fmt.Errorf("could not remove callback: %w", err)
+
+	resp, err := c.request("/callback/remove", options)
+	if err != nil {
+		return nil, err
 	}
-	return &response, nil
+
+	if resp.Is(http.StatusBadRequest) {
+		return nil, ErrInvalidURL
+	} else if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	}
+
+	var data RemoveCallbackResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return &data, nil
 }
 
 // AddCallbackResponse represents the result of an request
@@ -53,9 +74,21 @@ func (c *Connection) AddCallback(callbackURL string) (*AddCallbackResponse, erro
 	options := &struct {
 		CallbackURL string `url:"url"`
 	}{callbackURL}
-	var response AddCallbackResponse
-	if err := c.get(c.hashedURL("/callback/add", options), &response); err != nil {
-		return nil, fmt.Errorf("could not add callback: %w", err)
+
+	resp, err := c.request("/callback/add", options)
+	if err != nil {
+		return nil, err
 	}
-	return &response, nil
+
+	if resp.Is(http.StatusBadRequest) {
+		return nil, ErrInvalidURL
+	} else if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	}
+
+	var data AddCallbackResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return &data, nil
 }
