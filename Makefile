@@ -74,13 +74,17 @@ install:
 	$(Q)go install $(BUILD_FLAGS) $(COMMAND)
 	$(ECHO) "Installation successful. To learn more, try \"$(BINARY_NAME) --help\"."
 
+.PHONY: coverage
+coverage: test
+	$(Q)go tool cover -html=coverage.out -o coverage.html
+
 .PHONY: test
 test:
-	$(Q)go test -v ./...
+	$(Q)go test -v -covermode=count -coverprofile coverage.out ./...
 
 .PHONY: integration-test
 integration-test:
-	$(Q)go test -v ./... -failfast -tags=integration -args -host $(BRIDGE_HOST) -token $(BRIDGE_TOKEN)
+	$(Q)go test -v ./pkg/nuki/bridgeapi -failfast -tags=integration -args -host $(BRIDGE_HOST) -token $(BRIDGE_TOKEN)
 
 .PHONY:
 checkdeps:
@@ -110,3 +114,5 @@ version:
 clean:
 	$(ECHO) "Cleaning up"
 	$(Q)find . -type f -name '$(BINARY_NAME)-*' -delete
+	$(Q)find . -type f -name '*.out' -delete
+	$(Q)rm coverage.html
