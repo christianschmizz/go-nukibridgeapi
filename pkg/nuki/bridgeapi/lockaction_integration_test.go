@@ -12,7 +12,7 @@ import (
 )
 
 func TestConnection_LockAction(t *testing.T) {
-	conn := bridgeConn(t, *host, *token)
+	conn := bridgeConn(t)
 
 	var (
 		err error
@@ -35,7 +35,7 @@ func TestConnection_LockAction(t *testing.T) {
 }
 
 func TestConnection_LockState(t *testing.T) {
-	conn := bridgeConn(t, *host, *token)
+	conn := bridgeConn(t)
 
 	var (
 		err     error

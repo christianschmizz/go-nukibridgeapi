@@ -2,6 +2,7 @@ package bridgeapi_test
 
 import (
 	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
@@ -23,6 +24,13 @@ func ExampleConnectWithToken() {
 
 func ExampleScanOnConnect() {
 	_, err := bridgeapi.ConnectWithToken("192.168.1.11:8080", "abcdef", bridgeapi.ScanOnConnect())
+	if err != nil {
+		panic(err)
+	}
+}
+
+func ExampleUseClient() {
+	_, err := bridgeapi.ConnectWithToken("192.168.1.11:8080", "abcdef", bridgeapi.UseClient(&http.Client{}))
 	if err != nil {
 		panic(err)
 	}

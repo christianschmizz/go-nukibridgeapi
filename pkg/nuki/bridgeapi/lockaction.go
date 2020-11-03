@@ -2,8 +2,7 @@ package bridgeapi
 
 import (
 	"fmt"
-
-	"github.com/stretchr/stew/slice"
+	"net/http"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
@@ -28,30 +27,40 @@ func Wait() func(*lockActionOptions) {
 	}
 }
 
-func isActionSupported(action nuki.LockAction, deviceType nuki.DeviceType) bool {
-	if deviceType == nuki.SmartLock && slice.Contains(nuki.SmartLockActions, action) {
-		return true
-	} else if deviceType == nuki.Opener && slice.Contains(nuki.OpenerLockActions, action) {
-		return true
-	} else {
-		return false
-	}
-}
-
 // LockAction performs a action on the device with the given ID.
 func (c *Connection) LockAction(nukiID nuki.ID, action nuki.LockAction, options ...func(*lockActionOptions)) (*LockActionResponse, error) {
-	if !isActionSupported(action, nukiID.DeviceType) {
+	if !nuki.IsActionSupportedByDeviceType(action, nukiID.DeviceType) {
 		return nil, fmt.Errorf("unsupported lockAction: %v", action)
 	}
 
-	o := &lockActionOptions{nukiID.DeviceID, nukiID.DeviceType, action.Int(), true}
+	o := &lockActionOptions{
+		DeviceID:   nukiID.DeviceID,
+		DeviceType: nukiID.DeviceType,
+		Action:     action.Int(),
+		NoWait:     true,
+	}
 	for _, opt := range options {
 		opt(o)
 	}
 
-	var response LockActionResponse
-	if err := c.get(c.hashedURL("lockAction", o), &response); err != nil {
-		return nil, fmt.Errorf("could not execute lockAction: %w", err)
+	resp, err := c.request("lockAction", o)
+	if err != nil {
+		return nil, err
 	}
-	return &response, nil
+
+	if resp.Is(http.StatusBadRequest) {
+		return nil, &InvalidActionError{Action: action}
+	} else if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	} else if resp.Is(http.StatusNotFound) {
+		return nil, ErrUnknownDevice
+	} else if resp.Is(http.StatusServiceUnavailable) {
+		return nil, ErrDeviceOffline
+	}
+
+	var data LockActionResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return &data, nil
 }

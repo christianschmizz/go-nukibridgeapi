@@ -11,7 +11,7 @@ import (
 )
 
 func Test_CallbackHandling(t *testing.T) {
-	conn := bridgeConn(t, *host, *token)
+	conn := bridgeConn(t)
 
 	var (
 		err                   error
