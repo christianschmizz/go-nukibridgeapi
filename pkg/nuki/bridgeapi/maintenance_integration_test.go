@@ -9,7 +9,7 @@ import (
 )
 
 func TestConnection_Log(t *testing.T) {
-	conn := bridgeConn(t, *host, *token)
+	conn := bridgeConn(t)
 
 	{
 		logs, err := conn.Log(0, 12)

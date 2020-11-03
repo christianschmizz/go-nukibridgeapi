@@ -1,7 +1,7 @@
 package bridgeapi
 
 import (
-	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
@@ -43,9 +43,18 @@ type InfoResponse struct {
 
 // Info requests comprehensive information from the bridge
 func (c *Connection) Info() (*InfoResponse, error) {
-	var info InfoResponse
-	if err := c.get(c.hashedURL("info", nil), &info); err != nil {
-		return nil, fmt.Errorf("could not fetch bridge info: %w", err)
+	resp, err := c.request("info", nil)
+	if err != nil {
+		return nil, err
 	}
-	return &info, nil
+
+	if resp.Is(http.StatusUnauthorized) {
+		return nil, ErrInvalidToken
+	}
+
+	var data InfoResponse
+	if err := resp.Decode(&data); err != nil {
+		return nil, err
+	}
+	return &data, nil
 }

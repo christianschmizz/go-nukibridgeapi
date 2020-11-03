@@ -3,6 +3,8 @@ package nuki
 import (
 	"fmt"
 	"strings"
+
+	"github.com/stretchr/stew/slice"
 )
 
 // LockState describes the state of a device
@@ -160,6 +162,17 @@ const (
 	// DoorsensorStateCalibrating describes that the doorsensor is currently being calibrated
 	DoorsensorStateCalibrating DoorsensorState = 5
 )
+
+// IsActionSupportedByDeviceType checks whether the given action is supported by that device type
+func IsActionSupportedByDeviceType(action LockAction, deviceType DeviceType) bool {
+	if deviceType == SmartLock && slice.Contains(SmartLockActions, action) {
+		return true
+	} else if deviceType == Opener && slice.Contains(OpenerLockActions, action) {
+		return true
+	} else {
+		return false
+	}
+}
 
 // SmartLockActionFromString retrieves the appropriate action for a smart lock from a string
 func SmartLockActionFromString(s string) (e LockAction, err error) {
