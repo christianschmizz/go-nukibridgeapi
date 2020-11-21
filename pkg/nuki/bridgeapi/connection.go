@@ -140,7 +140,7 @@ func (c *Connection) hashedURL(path string, queryParams interface{}) string {
 	return u.String()
 }
 
-func (c *Connection) request(path string, queryParams interface{}) (*apiResponse, error) {
+func (c *Connection) request(path string, queryParams interface{}) (*APIResponseHandler, error) {
 	requestURL := c.hashedURL(path, queryParams)
 	request, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
@@ -154,7 +154,7 @@ func (c *Connection) request(path string, queryParams interface{}) (*apiResponse
 	}
 	defer resp.Body.Close()
 
-	r, err := NewApiResponse(resp)
+	r, err := NewAPIResponseHandler(resp)
 	if err != nil {
 		return nil, err
 	}
