@@ -53,34 +53,34 @@ jobs:
           prerelease: false
 
       - name: Upload Darwin
-          id: upload-darwin-release-asset
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./nukibridgectl-${{ github.ref }}-darwin.zip
-            asset_name: nukibridgectl-${{ github.ref }}-darwin.zip
-            asset_content_type: application/zip
+        id: upload_darwin_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./nukibridgectl-${{ github.ref }}-darwin.zip
+          asset_name: nukibridgectl-${{ github.ref }}-darwin.zip
+          asset_content_type: application/zip
 
       - name: Upload Linux
-          id: upload-linux-release-asset
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./nukibridgectl-${{ github.ref }}-linux.zip
-            asset_name: nukibridgectl-${{ github.ref }}-linux.zip
-            asset_content_type: application/zip
+        id: upload_linux_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./nukibridgectl-${{ github.ref }}-linux.zip
+          asset_name: nukibridgectl-${{ github.ref }}-linux.zip
+          asset_content_type: application/zip
 
       - name: Upload Windows
-          id: upload-windows-release-asset
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./nukibridgectl-${{ github.ref }}-windows.zip
-            asset_name: nukibridgectl-${{ github.ref }}-windows.zip
-            asset_content_type: application/zip
+        id: upload_windows_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./nukibridgectl-${{ github.ref }}-windows.zip
+          asset_name: nukibridgectl-${{ github.ref }}-windows.zip
+          asset_content_type: application/zip
