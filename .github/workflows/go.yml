@@ -42,8 +42,8 @@ jobs:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
           version: v1.31
 
-      - name: Build
-        run: make build
-
       - name: Test
         run: make test
+
+      - name: Build
+        run: make build
