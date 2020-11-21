@@ -7,7 +7,7 @@ on:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  build:
+  build_and_release:
     name: Build and Release
     runs-on: ubuntu-latest
     steps:
@@ -23,15 +23,6 @@ jobs:
         run: |
           go get -v -t -d ./...
 
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: v1.31
-
-      - name: Test
-        run: make test
-
       - name: Build
         run: make build-cross-static
 
@@ -41,9 +32,9 @@ jobs:
 
       - name: Compress
         run: |
-          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin nukibridgectl-darwin-amd64-static
-          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux nukibridgectl-linux-amd64-static
-          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows nukibridgectl-windows-amd64-static
+          zip --junk-paths /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin nukibridgectl-darwin-amd64-static
+          zip --junk-paths /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux nukibridgectl-linux-amd64-static
+          zip --junk-paths /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows nukibridgectl-windows-amd64-static
 
       - name: Create Release
         id: create_release
@@ -63,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin.zip
+          asset_path: /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin.zip
           asset_name: nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin.zip
           asset_content_type: application/zip
 
@@ -74,7 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux.zip
+          asset_path: /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux.zip
           asset_name: nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux.zip
           asset_content_type: application/zip
 
@@ -85,6 +76,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows.zip
+          asset_path: /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows.zip
           asset_name: nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows.zip
           asset_content_type: application/zip
