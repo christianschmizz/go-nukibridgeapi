@@ -38,10 +38,7 @@ func createLockActionCommand() *cobra.Command {
 			if err != nil {
 				log.Error().Err(err).Msg("failed to issue request")
 			}
-			if !state.Success {
-				log.Error().Err(err).Msg("was not successful")
-			}
-			fmt.Printf("%+v\n", state)
+			fmt.Printf("%t\n", state.Success)
 		},
 	}
 	cmd.Flags().BoolVarP(&NoWait, "nowait", "n", true, "Don't wait until the command finished")
