@@ -35,11 +35,15 @@ jobs:
       - name: Build
         run: make build-cross-static
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
       - name: Compress
         run: |
-          zip --junk-paths nukibridgectl-${{ github.ref }}-darwin nukibridgectl-darwin-amd64-static
-          zip --junk-paths nukibridgectl-${{ github.ref }}-linux nukibridgectl-linux-amd64-static
-          zip --junk-paths nukibridgectl-${{ github.ref }}-windows nukibridgectl-windows-amd64-static
+          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin nukibridgectl-darwin-amd64-static
+          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux nukibridgectl-linux-amd64-static
+          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows nukibridgectl-windows-amd64-static
 
       - name: Create Release
         id: create_release
@@ -59,8 +63,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nukibridgectl-${{ github.ref }}-darwin.zip
-          asset_name: nukibridgectl-${{ github.ref }}-darwin.zip
+          asset_path: ./nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin.zip
+          asset_name: nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin.zip
           asset_content_type: application/zip
 
       - name: Upload Linux
@@ -70,8 +74,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nukibridgectl-${{ github.ref }}-linux.zip
-          asset_name: nukibridgectl-${{ github.ref }}-linux.zip
+          asset_path: ./nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux.zip
+          asset_name: nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux.zip
           asset_content_type: application/zip
 
       - name: Upload Windows
@@ -81,6 +85,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./nukibridgectl-${{ github.ref }}-windows.zip
-          asset_name: nukibridgectl-${{ github.ref }}-windows.zip
+          asset_path: ./nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows.zip
+          asset_name: nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows.zip
           asset_content_type: application/zip
