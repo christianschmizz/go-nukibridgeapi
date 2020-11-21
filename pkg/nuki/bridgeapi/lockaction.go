@@ -49,7 +49,7 @@ func (c *Connection) LockAction(nukiID nuki.ID, action nuki.LockAction, options 
 	}
 
 	if resp.Is(http.StatusBadRequest) {
-		return nil, &InvalidActionError{Action: action}
+		return nil, &ErrInvalidAction{Action: action}
 	} else if resp.Is(http.StatusUnauthorized) {
 		return nil, ErrInvalidToken
 	} else if resp.Is(http.StatusNotFound) {
