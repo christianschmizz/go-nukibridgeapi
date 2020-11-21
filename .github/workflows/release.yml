@@ -33,7 +33,7 @@ jobs:
         run: make test
 
       - name: Build
-        run: build-cross-static
+        run: make build-cross-static
 
       - name: Compress
         run: |
