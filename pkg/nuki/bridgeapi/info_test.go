@@ -19,6 +19,7 @@ func TestInfo(t *testing.T) {
 		assert.NoError(t, err)
 
 		info, err := conn.Info()
+		assert.NoError(t, err)
 
 		ts, err := time.Parse(time.RFC3339, "2020-10-26T22:50:56+00:00")
 		assert.NoError(t, err)
