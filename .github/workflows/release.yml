@@ -32,9 +32,11 @@ jobs:
 
       - name: Compress
         run: |
-          zip --junk-paths /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin nukibridgectl-darwin-amd64-static
-          zip --junk-paths /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux nukibridgectl-linux-amd64-static
-          zip --junk-paths /nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows nukibridgectl-windows-amd64-static
+          pwd
+          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-darwin nukibridgectl-darwin-amd64-static
+          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-linux nukibridgectl-linux-amd64-static
+          zip --junk-paths nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows nukibridgectl-windows-amd64-static
+          file nukibridgectl-${{ steps.get_version.outputs.VERSION }}-windows
 
       - name: Create Release
         id: create_release
