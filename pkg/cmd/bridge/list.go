@@ -38,8 +38,8 @@ func printDeviceList(writer io.Writer, devices bridgeapi.ListPairedDevicesRespon
 	w := tabwriter.NewWriter(writer, 3, 0, 1, ' ', 0)
 	defer w.Flush()
 
-	_, _ = fmt.Fprintln(w, "ID\tType\tName\tBattery")
+	_, _ = fmt.Fprintln(w, "Type\tID\tName\tBattery\tFirmware Version")
 	for _, d := range devices {
-		_, _ = fmt.Fprintf(w, "%d\t%d\t%s\t%d%%\n", d.ID, d.Type, d.Name, d.LastKnownState.BatteryChargeState)
+		_, _ = fmt.Fprintf(w, "%d\t%d\t%s\t%d%%\t%s\n", d.Type, d.ID, d.Name, d.LastKnownState.BatteryChargeState, d.FirmwareVersion)
 	}
 }
