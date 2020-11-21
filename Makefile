@@ -115,4 +115,4 @@ clean:
 	$(ECHO) "Cleaning up"
 	$(Q)find . -type f -name '$(BINARY_NAME)-*' -delete
 	$(Q)find . -type f -name '*.out' -delete
-	$(Q)rm coverage.html
+	$(Q)rm -f coverage.html
