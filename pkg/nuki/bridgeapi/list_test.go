@@ -13,7 +13,7 @@ import (
 )
 
 func Test_ListPairedDevicesResponse(t *testing.T) {
-	t.Run("sucessful list", func(t *testing.T) {
+	t.Run("successful list", func(t *testing.T) {
 		conn, err := bridgeapi.ConnectWithToken("127.0.0.1:8080", "abcdef",
 			bridgeapi.UseClient(mocks.NewFileResponseClient(filepath.Join("testdata", "list.json"), http.StatusOK)))
 		assert.NoError(t, err)
