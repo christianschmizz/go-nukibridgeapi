@@ -20,17 +20,25 @@ import (
 )
 
 var (
-	ErrInvalidToken  = errors.New("token is invalid or a hashed token parameter is missing")
+	// ErrInvalidToken is issued as soon a a token is invalid or the token parameter is missing
+	ErrInvalidToken = errors.New("token is invalid or a hashed token parameter is missing")
+
+	// ErrUnknownDevice is issued when the given Nuki device is unknown
 	ErrUnknownDevice = errors.New("the given Nuki device is unknown")
+
+	// ErrDeviceOffline is issued when the Nuki device is offline
 	ErrDeviceOffline = errors.New("the given Nuki device is offline")
-	ErrInvalidURL    = errors.New("the given URL is invalid or too long")
+
+	// ErrInvalidURL is issues when the given URL is invalid or too long
+	ErrInvalidURL = errors.New("the given URL is invalid or too long")
 )
 
-type InvalidActionError struct {
+// ErrInvalidAction is issued when the given action was invalid
+type ErrInvalidAction struct {
 	Action nuki.LockAction
 }
 
-func (e *InvalidActionError) Error() string { return fmt.Sprintf("action %d is invalid", e.Action) }
+func (e *ErrInvalidAction) Error() string { return fmt.Sprintf("action %d is invalid", e.Action) }
 
 // HTTPClient interface
 type HTTPClient interface {
