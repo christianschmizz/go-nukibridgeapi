@@ -6,6 +6,7 @@ import (
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki"
 )
 
+// CallbackData represents all data delivered by the Nuki bridge in the callback
 type CallbackData struct {
 	ID                    int                  `json:"nukiId"`
 	Type                  nuki.DeviceType      `json:"deviceType"`

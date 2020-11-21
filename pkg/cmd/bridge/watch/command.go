@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// CreateWatchCommand creates the cobra command for watching the bridge
 func CreateWatchCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "watch <localInterfaceName>",

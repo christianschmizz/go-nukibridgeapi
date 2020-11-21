@@ -10,7 +10,6 @@ import (
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 	"github.com/godbus/dbus/v5"
-	_ "github.com/godbus/dbus/v5"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
