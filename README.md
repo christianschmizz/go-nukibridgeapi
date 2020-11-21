@@ -111,3 +111,80 @@ You noticed some unexpected behaviour or just want to know whats going on
 behind the scenes? You can enable debug logging by setting DEBUG at your env.
 
     $ DEBUG=1 nukibridgectl bridge --host 192.168.178.1:8080 --token abcde6 info
+
+# DBus Bridge
+
+`nukibridgectl` can also forward all events of your Nuki bridge to a DBus 
+instance. This is useful if you want to open up your Nuki events to a broader 
+audience, e.g. 3rd party applications.
+
+Therefor `nukibridgectl` will launch a local webserver and registers itself for
+callbacks.
+
+## Fire up a local DBus instance for testing
+
+    $ MY_SESSION_BUS_SOCKET=/tmp/dbus/$USER.session.usock
+    $ dbus-daemon --session --nofork --address unix:path=$MY_SESSION_BUS_SOCKET
+
+## Run nukibridgectl
+
+    $ DBUS_SESSION_BUS_ADDRESS=unix:path=/tmp/dbus/$USER.session.usock DEBUG=1 go run cmd/nukibridgectl/main.go bridge watch en0
+
+    2020-11-21T15:43:58+01:00 DBG   bridge.CallbackData{
+            ... // 5 identical fields
+            BatteryCritical:       false,
+            KeypadBatteryCritical: false,
+    -       DoorsensorState:       3,
+    +       DoorsensorState:       2,
+    -       DoorsensorStateName:   "door opened",
+    +       DoorsensorStateName:   "door closed",
+            RingactionTimestamp:   s"0001-01-01 00:00:00 +0000 UTC",
+            RingactionState:       false,
+      }
+    
+    2020-11-21T15:44:04+01:00 DBG   bridge.CallbackData{
+            ... // 5 identical fields
+            BatteryCritical:       false,
+            KeypadBatteryCritical: false,
+    -       DoorsensorState:       2,
+    +       DoorsensorState:       3,
+    -       DoorsensorStateName:   "door closed",
+    +       DoorsensorStateName:   "door opened",
+            RingactionTimestamp:   s"0001-01-01 00:00:00 +0000 UTC",
+            RingactionState:       false,
+      }
+
+## Monitoring
+
+    $ dbus-monitor --address unix:path=/tmp/$USER.session.usock
+    
+    signal time=1605969838.072019 sender=:1.0 -> destination=(null destination) serial=7 path=/nuki/bridge; interface=nuki.bridge; member=Event
+       struct {
+          int32 597123456
+          int32 0
+          int32 2
+          int32 3
+          string "unlocked"
+          boolean false
+          boolean false
+          int32 3
+          string "door opened"
+          boolean false
+       }
+    
+    signal time=1605969844.810805 sender=:1.0 -> destination=(null destination) serial=8 path=/nuki/bridge; interface=nuki.bridge; member=Event
+       struct {
+          int32 597123456
+          int32 0
+          int32 2
+          int32 3
+          string "unlocked"
+          boolean false
+          boolean false
+          int32 2
+          string "door closed"
+          boolean false
+       }
+    
+    
+    
