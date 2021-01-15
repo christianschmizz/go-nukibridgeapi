@@ -97,6 +97,48 @@ If you want to pass on your configuration at the command-line you can do so, too
 
     $ nukibridgectl bridge --host 192.168.178.1:8080 --token abcde6 <command>
 
+# Examples
+
+## List devices
+
+After you set up your configuration you can query the bridge for available devices: 
+
+    $ nukibridgectl bridge list
+    Type ID        Name        Battery Firmware Version
+    0    123456789 Wohnungstür 68%     2.9.10
+    2    123456789 Haustür     0%      1.6.4
+
+A type of 0 means a Smartlock, a type of 2 an Opener.
+
+## Simple Locking / Unlocking of a Nuki Smartlock
+
+To just lock/unlock a smart lock (type: 0) you type:
+
+    $ nukibridgectl bridge lock 0 <deviceID>
+    $ nukibridgectl bridge unlock 0 <deviceID>
+
+## Applying more elaborate lock actions
+
+See [nuki Bridge's API docs on lock action](https://developer.nuki.io/page/nuki-bridge-http-api-1-12/4#heading--lock-actions) for 
+a list of available actions and their purpose. 
+
+    # Execute actions at a smart lock (type: 0) via lockAction
+    $ nukibridgectl bridge lockAction 0 <deviceID> <lock|unlock|unlatch|lockandgo|lockandgowithunlatch>
+
+    # Execute actions at an opener (type: 2) via lockAction
+    $ nukibridgectl bridge lockAction 2 <deviceID> <rto_on|rto_off|esa|cm_on|cm_off>
+
+## Query the state
+
+See [nuki Bridge's API docs on lock states](https://developer.nuki.io/page/nuki-bridge-http-api-1-12/4#heading--lock-states) for 
+further details on the available information.
+
+Short reminder from the Nuki docs:
+
+> Warning: /lockstate gets the current state directly from the device and so should not be used for constant polling to avoid draining the batteries too fast. /list can be used to get regular updates on the state, as is it cached on the bridge.
+
+    $ ./nukibridgectl bridge lockState 2 123456789
+
 # Tests
 
 ## Integration tests
