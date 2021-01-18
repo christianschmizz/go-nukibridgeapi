@@ -3,6 +3,7 @@ package watch
 import (
 	"context"
 	"fmt"
+	"github.com/pkg/errors"
 	"math/rand"
 	"net/http"
 	"sync"
@@ -19,6 +20,7 @@ const (
 	dBusInterfaceName string          = "nuki.bridge.Event"
 )
 
+// forwarder is handling all incoming http request of the nuki bridge and forwards them to dbus.
 func forwarder(ctx context.Context, wg *sync.WaitGroup, ifname, nukiBridgeHost, nukiBridgeToken string) {
 	defer wg.Done()
 
@@ -35,10 +37,9 @@ func forwarder(ctx context.Context, wg *sync.WaitGroup, ifname, nukiBridgeHost, 
 		log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 	}
 
-	// Connect to dbus' session bus
-	dbusConn, err := dbus.SessionBus()
+	dbusConn, err := connectToSessionBusAnonymously()
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to connect to session bus:")
+		log.Fatal().Err(err).Msg("failed to connect to session bus:")
 	}
 	defer func() {
 		if err := dbusConn.Close(); err != nil {
@@ -46,15 +47,17 @@ func forwarder(ctx context.Context, wg *sync.WaitGroup, ifname, nukiBridgeHost, 
 		}
 	}()
 
+	// generate some random URL to avoid any collisions on the bridge with other callback URLs
 	rand.Seed(time.Now().UnixNano())
 	callbackPath := fmt.Sprintf("/callback/%d", rand.Intn(999999-100000)+100000)
 	callbackURL := fmt.Sprintf("http://%s:8080%s", localhostAddress, callbackPath)
 
-	// Setup callbacks at the bridge
+	// setup callbacks at the bridge
 	callbackLogger := log.With().Str("callback_url", callbackURL).Logger()
 	registerCallback(conn, callbackURL, callbackLogger)
 	defer unregisterCallback(conn, callbackURL, callbackLogger)
 
+	// prepare the HTTP server which receives the nuki callbacks from the bridge
 	mux := http.NewServeMux()
 	mux.HandleFunc(callbackPath, createCallbackRequestHandler(dbusConn))
 
@@ -70,6 +73,21 @@ func forwarder(ctx context.Context, wg *sync.WaitGroup, ifname, nukiBridgeHost, 
 	}()
 
 	<-ctx.Done()
+}
+
+// connectToSessionBusAnonymously retrieves a connection to dbus
+func connectToSessionBusAnonymously() (*dbus.Conn, error) {
+	conn, err := dbus.SessionBusPrivate()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to connect to session bus")
+	}
+	if err := conn.Auth([]dbus.Auth{dbus.AuthAnonymous()}); err != nil {
+		return nil, errors.Wrap(err, "failed to authenticate at session bus")
+	}
+	if err := conn.Hello(); err != nil {
+		return nil, errors.Wrap(err, "failed to greet session bus")
+	}
+	return conn, nil
 }
 
 func registerCallback(conn *bridgeapi.Connection, callbackURL string, logger zerolog.Logger) {
