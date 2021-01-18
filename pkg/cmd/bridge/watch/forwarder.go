@@ -3,11 +3,12 @@ package watch
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
 	"math/rand"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/pkg/errors"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 	"github.com/godbus/dbus/v5"
