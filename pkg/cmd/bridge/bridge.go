@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/cmd/bridge/watch"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -47,6 +48,7 @@ func CreateCommand() *cobra.Command {
 	cmd.AddCommand(createLockCommand())
 	cmd.AddCommand(createUnlockCommand())
 	// cmd.AddCommand(createUnpairCommand())
+	cmd.AddCommand(watch.CreateWatchCommand())
 
 	callbacks := &cobra.Command{Use: "callbacks", Short: "Callback management"}
 	callbacks.AddCommand(createCallbackListCommand())

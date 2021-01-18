@@ -1,0 +1,18 @@
+
+services:
+  daemon:
+    build: .
+    ports:
+      - "55556:55556"
+
+  monitor:
+    build: .
+    entrypoint: dbus-monitor --session
+    environment:
+      - "DBUS_SESSION_BUS_ADDRESS=tcp:host=10.211.55.6,bind=*,port=55556,family=ipv4"
+    links:
+      - daemon
+
+networks:
+  default:
+    driver: "bridge"

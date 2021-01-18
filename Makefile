@@ -91,8 +91,8 @@ checkdeps:
 	@echo "Checking dependencies"
 ifeq ($(shell which golangci-lint),)
 	$(ECHO) Installing golangci-lint
-ifeq ($(shell which brew),)
-	$(Q)brew install golangci/tap/golangci-lint
+ifneq ($(shell which brew),)
+	$(Q)brew install golangci-lint
 else
 	$(Q)mkdir -p ${GOPATH}/bin
 	$(Q)curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
@@ -100,11 +100,11 @@ endif
 endif
 
 .PHONY: lint
-lint:
+lint: checkdeps
 # see https://github.com/golangci/golangci-lint/issues/1040
 	$(ECHO) "Running $@ check"
-	@GO111MODULE=on ${GOPATH}/bin/golangci-lint cache clean
-	@GO111MODULE=on ${GOPATH}/bin/golangci-lint run --timeout=5m --config ./.golangci.yml
+	@GO111MODULE=on $(shell which golangci-lint) cache clean
+	@GO111MODULE=on $(shell which golangci-lint) run --timeout=5m --config ./.golangci.yml
 
 .PHONY: version
 version:
