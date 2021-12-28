@@ -178,7 +178,7 @@ const (
 
 // IsActionSupportedByDeviceType checks whether the given action is supported by that device type
 func IsActionSupportedByDeviceType(action LockAction, deviceType DeviceType) bool {
-	if deviceType == SmartLock && slice.Contains(SmartLockActions, action) {
+	if (deviceType == SmartLock || deviceType == SmartLock3) && slice.Contains(SmartLockActions, action) {
 		return true
 	} else if deviceType == Opener && slice.Contains(OpenerLockActions, action) {
 		return true
