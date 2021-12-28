@@ -159,7 +159,7 @@ const (
 	// DoorsensorStateDoorClosed describes that the door was detected to be closed
 	DoorsensorStateDoorClosed DoorsensorState = 2
 
-	// DoorsensorStateDoorOpened describes that the door was deteced to be open
+	// DoorsensorStateDoorOpened describes that the door was detected to be open
 	DoorsensorStateDoorOpened DoorsensorState = 3
 
 	// DoorsensorStateDoorStateUnknown describes that the state of the door is unknown

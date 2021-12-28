@@ -29,7 +29,7 @@ var (
 	// ErrDeviceOffline is issued when the Nuki device is offline
 	ErrDeviceOffline = errors.New("the given Nuki device is offline")
 
-	// ErrInvalidURL is issues when the given URL is invalid or too long
+	// ErrInvalidURL is issued when the given URL is invalid or too long
 	ErrInvalidURL = errors.New("the given URL is invalid or too long")
 )
 
