@@ -14,6 +14,8 @@ type CallbackData struct {
 	State                 nuki.LockState       `json:"state"`
 	StateName             string               `json:"stateName"`
 	BatteryCritical       bool                 `json:"batteryCritical"`
+	BatteryCharging       bool                 `json:"batteryCharging"`
+	BatteryChargeState    uint8                `json:"batteryChargeState"`
 	KeypadBatteryCritical bool                 `json:"keypadBatteryCritical"`
 	DoorsensorState       nuki.DoorsensorState `json:"doorsensorState,omitempty"`
 	DoorsensorStateName   string               `json:"doorsensorStateName,omitempty"`
