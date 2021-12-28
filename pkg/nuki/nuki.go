@@ -46,6 +46,12 @@ const (
 
 	// Opener is a Nuki Opener used for integration into door-opener systems
 	Opener DeviceType = 2
+
+	// SmartDoor is a Nuki Smart Door
+	SmartDoor DeviceType = 3
+
+	// SmartLock3 is a Nuki Smart Lock 3.0 (Pro)
+	SmartLock3 DeviceType = 4
 )
 
 const (
