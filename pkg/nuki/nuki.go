@@ -167,6 +167,13 @@ const (
 
 	// DoorsensorStateCalibrating describes that the doorsensor is currently being calibrated
 	DoorsensorStateCalibrating DoorsensorState = 5
+
+	// DoorsensorStateUncalibrated indicates an uncalibrated sensor
+	DoorsensorStateUncalibrated DoorsensorState = 16
+
+	DoorsensorStateRemoved DoorsensorState = 240
+
+	DoorsensorStateUnknown DoorsensorState = 255
 )
 
 // IsActionSupportedByDeviceType checks whether the given action is supported by that device type
