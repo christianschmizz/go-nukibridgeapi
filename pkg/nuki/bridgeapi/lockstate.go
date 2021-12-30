@@ -9,16 +9,18 @@ import (
 
 // LockStateResponse contains the response results from the respective API call
 type LockStateResponse struct {
-	Mode                  int       `json:"mode"`
-	State                 int       `json:"state"`
-	StateName             string    `json:"stateName"`
-	BatteryCritical       bool      `json:"batteryCritical"`
-	KeypadBatteryCritical bool      `json:"keypadBatteryCritical"`
-	DoorsensorState       int       `json:"doorsensorState,omitempty"`
-	DoorsensorStateName   string    `json:"doorsensorStateName,omitempty"`
-	RingactionState       bool      `json:"ringactionState,omitempty"`
-	RingactionTimestamp   time.Time `json:"ringactionTimestamp,omitempty"`
-	Success               bool      `json:"success"`
+	Mode                  nuki.LockMode        `json:"mode"`
+	State                 nuki.LockState       `json:"state"`
+	StateName             string               `json:"stateName"`
+	BatteryCritical       bool                 `json:"batteryCritical"`
+	BatteryCharging       bool                 `json:"batteryCharging"`
+	BatteryChargeState    uint8                `json:"batteryChargeState"`
+	KeypadBatteryCritical bool                 `json:"keypadBatteryCritical"`
+	DoorsensorState       nuki.DoorsensorState `json:"doorsensorState,omitempty"`
+	DoorsensorStateName   string               `json:"doorsensorStateName,omitempty"`
+	RingactionState       bool                 `json:"ringactionState,omitempty"`
+	RingactionTimestamp   time.Time            `json:"ringactionTimestamp,omitempty"`
+	Success               bool                 `json:"success"`
 }
 
 type lockStateOptions struct {
