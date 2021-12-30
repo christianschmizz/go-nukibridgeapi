@@ -9,18 +9,18 @@ import (
 
 // LastKnownState describes the last known state of a device
 type LastKnownState struct {
-	Mode                  int       `json:"mode"`
-	State                 int       `json:"state"`
-	StateName             string    `json:"stateName"`
-	BatteryCritical       bool      `json:"batteryCritical"`
-	BatteryCharging       bool      `json:"batteryCharging"`
-	BatteryChargeState    int       `json:"batteryChargeState"`
-	KeypadBatteryCritical bool      `json:"keypadBatteryCritical,omitempty"`
-	DoorsensorState       int       `json:"doorsensorState,omitempty"`
-	DoorsensorStateName   string    `json:"doorsensorStateName,omitempty"`
-	RingactionState       bool      `json:"ringactionState,omitempty"`
-	RingactionTimestamp   time.Time `json:"ringactionTimestamp,omitempty"`
-	Timestamp             time.Time `json:"timestamp"`
+	Mode                  nuki.LockMode        `json:"mode"`
+	State                 nuki.LockState       `json:"state"`
+	StateName             string               `json:"stateName"`
+	BatteryCritical       bool                 `json:"batteryCritical"`
+	BatteryCharging       bool                 `json:"batteryCharging"`
+	BatteryChargeState    uint8                `json:"batteryChargeState"`
+	KeypadBatteryCritical bool                 `json:"keypadBatteryCritical,omitempty"`
+	DoorsensorState       nuki.DoorsensorState `json:"doorsensorState,omitempty"`
+	DoorsensorStateName   string               `json:"doorsensorStateName,omitempty"`
+	RingactionState       bool                 `json:"ringactionState,omitempty"`
+	RingactionTimestamp   time.Time            `json:"ringactionTimestamp,omitempty"`
+	Timestamp             time.Time            `json:"timestamp"`
 }
 
 // DeviceInfo describes some basic information of a device
