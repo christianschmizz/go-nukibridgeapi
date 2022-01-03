@@ -6,11 +6,9 @@ import (
 	"os"
 	"text/tabwriter"
 
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createLogCommand() *cobra.Command {
@@ -18,14 +16,9 @@ func createLogCommand() *cobra.Command {
 		Use:   "log",
 		Short: "Log entries",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
-			if err != nil {
-				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
-			}
-
 			offset, _ := cmd.Flags().GetInt("offset")
 			count, _ := cmd.Flags().GetInt("count")
-			logLines, err := conn.Log(offset, count)
+			logLines, err := mustConnect(nil).Log(offset, count)
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to retrieve log entries from Nuki bridge")
 			}

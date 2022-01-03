@@ -5,9 +5,6 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createCallbackAddCommand() *cobra.Command {
@@ -18,12 +15,7 @@ func createCallbackAddCommand() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			url := args[0]
 
-			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
-			if err != nil {
-				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
-			}
-
-			resp, err := conn.AddCallback(url)
+			resp, err := mustConnect(nil).AddCallback(url)
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to retrieve add callback to Nuki bridge")
 			}

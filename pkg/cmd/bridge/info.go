@@ -6,11 +6,9 @@ import (
 	"os"
 	"text/tabwriter"
 
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createInfoCommand() *cobra.Command {
@@ -18,12 +16,7 @@ func createInfoCommand() *cobra.Command {
 		Use:   "info",
 		Short: "Retrieve bridge info",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
-			if err != nil {
-				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
-			}
-
-			info, err := conn.Info()
+			info, err := mustConnect(nil).Info()
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to retrieve info from Nuki bridge")
 			}

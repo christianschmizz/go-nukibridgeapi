@@ -6,9 +6,6 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createCallbackRemoveCommand() *cobra.Command {
@@ -22,12 +19,7 @@ func createCallbackRemoveCommand() *cobra.Command {
 				log.Fatal().Err(err).Msg("invalid callbackID")
 			}
 
-			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
-			if err != nil {
-				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
-			}
-
-			resp, err := conn.RemoveCallback(callbackID)
+			resp, err := mustConnect(nil).RemoveCallback(callbackID)
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to remove callback from Nuki bridge")
 			}
