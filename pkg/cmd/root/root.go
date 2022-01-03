@@ -42,7 +42,7 @@ func Execute() {
 	cobra.OnInitialize(initViper)
 
 	if err := rootCmd.Execute(); err != nil {
-		log.Fatal().Err(err).Msg("")
+		log.Fatal().Err(err).Msg("failed to execute command")
 	}
 
 	os.Exit(0)
