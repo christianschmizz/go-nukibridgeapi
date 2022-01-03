@@ -22,9 +22,12 @@ func CreateCommand() *cobra.Command {
 			if err != nil {
 				log.Fatal().Err(err).Msg("discovery failed")
 			}
-			log.Info().Msgf("found %d bridges", len(discovery.Bridges))
-
-			printBridges(os.Stdout, discovery.Bridges)
+			if len(discovery.Bridges) > 0 {
+				log.Info().Msgf("found %d bridges", len(discovery.Bridges))
+				printBridges(os.Stdout, discovery.Bridges)
+			} else {
+				log.Warn().Msg("no bridges found")
+			}
 		},
 	}
 
