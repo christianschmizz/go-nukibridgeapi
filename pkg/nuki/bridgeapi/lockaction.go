@@ -55,7 +55,7 @@ func (c *Connection) LockAction(nukiID nuki.ID, action nuki.LockAction, options 
 	} else if resp.Is(http.StatusNotFound) {
 		return nil, ErrUnknownDevice
 	} else if resp.Is(http.StatusServiceUnavailable) {
-		return nil, ErrDeviceOffline
+		return nil, ErrDeviceIsTemporarilyOffline
 	}
 
 	var data LockActionResponse

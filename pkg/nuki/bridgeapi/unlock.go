@@ -37,7 +37,7 @@ func (c *Connection) Unlock(nukiID nuki.ID, options ...func(*unlockOptions)) (*U
 	} else if resp.Is(http.StatusNotFound) {
 		return nil, ErrUnknownDevice
 	} else if resp.Is(http.StatusServiceUnavailable) {
-		return nil, ErrDeviceOffline
+		return nil, ErrDeviceIsTemporarilyOffline
 	}
 
 	var data UnlockResponse
