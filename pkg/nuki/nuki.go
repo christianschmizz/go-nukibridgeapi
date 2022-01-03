@@ -165,14 +165,16 @@ const (
 	// DoorsensorStateDoorStateUnknown describes that the state of the door is unknown
 	DoorsensorStateDoorStateUnknown DoorsensorState = 4
 
-	// DoorsensorStateCalibrating describes that the doorsensor is currently being calibrated
+	// DoorsensorStateCalibrating describes that the door-sensor is currently being calibrated
 	DoorsensorStateCalibrating DoorsensorState = 5
 
 	// DoorsensorStateUncalibrated indicates an uncalibrated sensor
 	DoorsensorStateUncalibrated DoorsensorState = 16
 
+	// DoorsensorStateRemoved indicates a missing door-sensor
 	DoorsensorStateRemoved DoorsensorState = 240
 
+	// DoorsensorStateUnknown tells that the sensor is in an unknown state
 	DoorsensorStateUnknown DoorsensorState = 255
 )
 
