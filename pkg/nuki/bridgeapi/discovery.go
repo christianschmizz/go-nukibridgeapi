@@ -38,5 +38,10 @@ func Discover() (*DiscoverResponse, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return nil, errors.Wrapf(err, "failed to decode discovery data")
 	}
+
+	if response.ErrorCode != 0 {
+		return nil, errors.New("unknown error occurred when trying to discover devices.")
+	}
+
 	return &response, nil
 }
