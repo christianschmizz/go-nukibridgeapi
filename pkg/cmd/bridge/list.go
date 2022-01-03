@@ -7,11 +7,9 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 var showLastKnownState bool
@@ -21,12 +19,7 @@ func createListCommand() *cobra.Command {
 		Use:   "list",
 		Short: "List paired devices",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
-			if err != nil {
-				log.Fatal().Err(err).Msg("")
-			}
-
-			devices, err := conn.ListPairedDevices()
+			devices, err := mustConnect(nil).ListPairedDevices()
 			if err != nil {
 				log.Fatal().Err(err).Msg("")
 			}

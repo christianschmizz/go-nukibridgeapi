@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/christianschmizz/go-nukibridgeapi/pkg/cmd/bridge/watch"
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -60,8 +61,8 @@ func CreateCommand() *cobra.Command {
 	return cmd
 }
 
-// resolveNukiIDFromArgs assembles an ID from the first two args
-func resolveNukiIDFromArgs(args []string) (*nuki.ID, error) {
+// resolveDeviceIDFromArgs assembles an ID from the first two args
+func resolveDeviceIDFromArgs(args []string) (*nuki.ID, error) {
 	deviceType, err := strconv.Atoi(args[0])
 	if err != nil {
 		return nil, fmt.Errorf("invalid device's type: %v", args[0])
@@ -73,4 +74,23 @@ func resolveNukiIDFromArgs(args []string) (*nuki.ID, error) {
 	}
 
 	return &nuki.ID{DeviceID: deviceID, DeviceType: nuki.DeviceType(deviceType)}, nil
+}
+
+func mustResolveDeviceIDFromArgs(args []string) *nuki.ID {
+	nukiID, err := resolveDeviceIDFromArgs(args)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to resolve nukiID from args")
+	}
+	return nukiID
+}
+
+func mustConnect(v *viper.Viper) *bridgeapi.Connection {
+	if v == nil {
+		v = viper.GetViper()
+	}
+	conn, err := bridgeapi.ConnectWithToken(v.GetString("host"), v.GetString("token"))
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
+	}
+	return conn
 }

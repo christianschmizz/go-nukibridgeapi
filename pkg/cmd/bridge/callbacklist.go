@@ -6,11 +6,9 @@ import (
 	"os"
 	"text/tabwriter"
 
+	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"github.com/christianschmizz/go-nukibridgeapi/pkg/nuki/bridgeapi"
 )
 
 func createCallbackListCommand() *cobra.Command {
@@ -18,12 +16,7 @@ func createCallbackListCommand() *cobra.Command {
 		Use:   "list",
 		Short: "List callbacks",
 		Run: func(cmd *cobra.Command, args []string) {
-			conn, err := bridgeapi.ConnectWithToken(viper.GetString("host"), viper.GetString("token"))
-			if err != nil {
-				log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
-			}
-
-			resp, err := conn.ListCallbacks()
+			resp, err := mustConnect(nil).ListCallbacks()
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to retrieve list of callbacks from Nuki bridge")
 			}
