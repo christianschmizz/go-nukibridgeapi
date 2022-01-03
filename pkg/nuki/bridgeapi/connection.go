@@ -26,11 +26,17 @@ var (
 	// ErrUnknownDevice is issued when the given Nuki device is unknown
 	ErrUnknownDevice = errors.New("the given Nuki device is unknown")
 
-	// ErrDeviceOffline is issued when the Nuki device is offline
-	ErrDeviceOffline = errors.New("the given Nuki device is offline")
+	// ErrDeviceIsTemporarilyOffline is issued when the Nuki device is temporarily offline
+	ErrDeviceIsTemporarilyOffline = errors.New("the given Nuki device is offline")
 
 	// ErrInvalidURL is issued when the given URL is invalid or too long
 	ErrInvalidURL = errors.New("the given URL is invalid or too long")
+
+	// ErrAnotherRequestIsAlreadyRunning is issued when the device is already busy
+	ErrAnotherRequestIsAlreadyRunning = errors.New("another request already running on the device. Increase intervals between API calls sent to the Bridge as it can only handle one request at a time")
+
+	// ErrDeviceIsOffline indicates that the device was not seen by the bridge for a longer period of time
+	ErrDeviceIsOffline = errors.New("the device was noticed to be offline for a longer period of time")
 )
 
 // ErrInvalidAction is issued when the given action was invalid
@@ -158,6 +164,11 @@ func (c *Connection) request(path string, queryParams interface{}) (*APIResponse
 	if err != nil {
 		return nil, err
 	}
+
+	if r.Is(http.StatusGone) {
+		return nil, ErrDeviceIsOffline
+	}
+
 	return r, nil
 }
 
