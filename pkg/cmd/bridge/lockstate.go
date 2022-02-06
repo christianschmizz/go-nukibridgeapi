@@ -19,7 +19,10 @@ func createLockStateCommand() *cobra.Command {
 			if err != nil {
 				log.Fatal().Err(err).Msg("")
 			}
-			fmt.Printf("%+v\n", state)
+
+			if data, err := json.MarshalIndent(state, "", "   "); err == nil {
+				fmt.Println(string(data))
+			}
 		},
 	}
 
