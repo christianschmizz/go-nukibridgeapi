@@ -60,7 +60,7 @@ func initViper() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			panic(err)
+			log.Fatal().Err(err).Msg("no home directory found")
 		}
 
 		// Search config in home directory with name ".cobra" (without extension).
