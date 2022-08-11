@@ -31,7 +31,7 @@ VERSION ?= $(shell git describe --tags 2>/dev/null || git rev-parse --short HEAD
 
 GO_LDFLAGS := -X github.com/christianschmizz/go-nukibridgeapi/internal/build.Version=$(VERSION) $(GO_LDFLAGS)
 GO_LDFLAGS := -X github.com/christianschmizz/go-nukibridgeapi/internal/build.Date=$(BUILD_DATE) $(GO_LDFLAGS)
-GO_LDFLAGS_STATIC := '-extldflags "-static"' $(GO_LDFLAGS)
+GO_LDFLAGS_STATIC := -w -extldflags '-static' $(GO_LDFLAGS)
 
 BUILD_FLAGS = -a -trimpath -ldflags "$(GO_LDFLAGS)"
 BUILD_FLAGS_STATIC = -a -trimpath -ldflags "$(GO_LDFLAGS_STATIC)"
