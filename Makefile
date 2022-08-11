@@ -95,7 +95,7 @@ ifneq ($(shell which brew),)
 	$(Q)brew install golangci-lint
 else
 	$(Q)mkdir -p ${GOPATH}/bin
-	$(Q)curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
+	$(Q)curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.48.0
 endif
 endif
 
