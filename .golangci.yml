@@ -12,7 +12,7 @@ linters:
     - goimports
     - misspell
     - govet
-    - golint
+    - revive
     - ineffassign
     - gosimple
     - deadcode
