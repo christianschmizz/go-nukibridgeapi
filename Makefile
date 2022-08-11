@@ -93,9 +93,11 @@ ifeq ($(shell which golangci-lint),)
 	$(ECHO) Installing golangci-lint
 ifneq ($(shell which brew),)
 	$(Q)brew install golangci-lint
+	$(Q)brew install revive
 else
 	$(Q)mkdir -p ${GOPATH}/bin
 	$(Q)curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.48.0
+	$(Q)go install github.com/mgechev/revive@latest
 endif
 endif
 
