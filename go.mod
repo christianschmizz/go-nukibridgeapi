@@ -13,6 +13,7 @@ require (
 	github.com/spf13/viper v1.7.0
 	github.com/stretchr/stew v0.0.0-20130812190256-80ef0842b48b
 	github.com/stretchr/testify v1.6.1
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	tinygo.org/x/bluetooth v0.5.0
 )
 
