@@ -309,6 +309,7 @@ var (
 		OpenerStateUndefined,
 	}
 
+	// DoorsensorStates contains all valid states of a doorsensor
 	DoorsensorStates = [...]DoorsensorState{
 		DoorsensorStateDeactivated,
 		DoorsensorStateDoorClosed,
