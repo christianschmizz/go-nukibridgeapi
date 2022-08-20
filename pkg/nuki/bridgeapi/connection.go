@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"golang.org/x/crypto/nacl/secretbox"
 	"math/rand"
 	"net"
 	"net/http"
@@ -53,10 +54,11 @@ type HTTPClient interface {
 
 // Connection holds all information required for communication with a bridge
 type Connection struct {
-	client     HTTPClient
-	bridgeHost string
-	token      string
-	scan       map[nuki.ID]*ScanResult
+	client       HTTPClient
+	bridgeHost   string
+	token        string
+	scan         map[nuki.ID]*ScanResult
+	encryptToken bool
 }
 
 // ScanOnConnect may be used as an options when connection and requests
@@ -81,7 +83,14 @@ func UseClient(client HTTPClient) func(*Connection) {
 	}
 }
 
-// IsValidBridgeHost checks for validity of foven address
+// UseEncryptedToken enables the use of an encrypted token introduces w/ 1.13.2 (17.06.2022)
+func UseEncryptedToken() func(*Connection) {
+	return func(c *Connection) {
+		c.encryptToken = true
+	}
+}
+
+// IsValidBridgeHost checks for validity of given address
 func IsValidBridgeHost(bridgeHost string) (bool, error) {
 	ip, _, err := net.SplitHostPort(bridgeHost)
 	if err != nil {
@@ -117,23 +126,42 @@ func ConnectWithToken(bridgeHost, token string, options ...func(*Connection)) (*
 	return conn, nil
 }
 
-// hashedURL generates a hashed URL
-func (c *Connection) hashedURL(path string, queryParams interface{}) string {
+// prepareURL generates a hashed URL
+func (c *Connection) prepareURL(path string, queryParams interface{}) string {
 	ts := time.Now().UTC().Format(time.RFC3339)
 	rnr := rand.Intn(1000)
 
-	// Generate the hash
-	h := sha256.New()
-	h.Write([]byte(fmt.Sprintf("%s,%d,%s", ts, rnr, c.token)))
-	hash := hex.EncodeToString(h.Sum(nil))
-
 	u := url.URL{Scheme: "http", Host: c.bridgeHost, Path: path}
+	q := u.Query()
+
+	if c.encryptToken {
+		nonce := [24]byte{}
+		_, err := rand.Read(nonce[:])
+		if err != nil {
+			panic(err)
+		}
+
+		h := sha256.New()
+		h.Write([]byte(c.token))
+		key := [32]byte{}
+		copy(key[:], h.Sum(nil))
+
+		ctoken := secretbox.Seal(nil, []byte(ts+`,`+strconv.Itoa(rnr)), &nonce, &key)
+
+		q.Set("ctoken", hex.EncodeToString(ctoken))
+		q.Set("nonce", hex.EncodeToString(nonce[:]))
+	} else {
+		// Generate the hash
+		h := sha256.New()
+		h.Write([]byte(fmt.Sprintf("%s,%d,%s", ts, rnr, c.token)))
+		hash := hex.EncodeToString(h.Sum(nil))
+
+		q.Set("ts", ts)
+		q.Set("rnr", strconv.Itoa(rnr))
+		q.Set("hash", hash)
+	}
 
 	// Put all the details at the query string and re-add it to the URL
-	q := u.Query()
-	q.Set("ts", ts)
-	q.Set("rnr", strconv.Itoa(rnr))
-	q.Set("hash", hash)
 	u.RawQuery = q.Encode()
 
 	if queryParams != nil && !reflect.DeepEqual(queryParams, reflect.Zero(reflect.TypeOf(queryParams)).Interface()) {
@@ -147,7 +175,7 @@ func (c *Connection) hashedURL(path string, queryParams interface{}) string {
 }
 
 func (c *Connection) request(path string, queryParams interface{}) (*APIResponseHandler, error) {
-	requestURL := c.hashedURL(path, queryParams)
+	requestURL := c.prepareURL(path, queryParams)
 	request, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
