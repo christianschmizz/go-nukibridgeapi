@@ -6,6 +6,7 @@ require (
 	github.com/godbus/dbus/v5 v5.0.3
 	github.com/google/go-cmp v0.5.2
 	github.com/google/go-querystring v1.0.0
+	github.com/hashicorp/go-version v1.6.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.20.0

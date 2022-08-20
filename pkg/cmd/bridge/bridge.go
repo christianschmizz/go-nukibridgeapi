@@ -22,6 +22,9 @@ var (
 
 	// UseEncryptedTokens enables the use of encrypted tokens (only supported by Bridge 1.0: ≥1.22.1 and Bridge 2.0: ≥2.14.0)
 	UseEncryptedTokens bool
+
+	// PrintJSON enabled printing API responses as JSON
+	PrintJSON bool
 )
 
 // CreateCommand creates the "bridge" command group
@@ -43,6 +46,11 @@ func CreateCommand() *cobra.Command {
 
 	cmd.PersistentFlags().BoolVar(&UseEncryptedTokens, "encrypt", false, "Use encrypted tokens")
 	if err := viper.BindPFlag("encrypt", cmd.PersistentFlags().Lookup("encrypt")); err != nil {
+		log.Fatal().Err(err).Msg("unable to bind flag")
+	}
+
+	cmd.PersistentFlags().BoolVar(&PrintJSON, "json", false, "Print JSON")
+	if err := viper.BindPFlag("json", cmd.PersistentFlags().Lookup("json")); err != nil {
 		log.Fatal().Err(err).Msg("unable to bind flag")
 	}
 

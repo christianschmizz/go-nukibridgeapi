@@ -1,6 +1,7 @@
 package bridge
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -21,11 +22,25 @@ func createInfoCommand() *cobra.Command {
 				log.Fatal().Err(err).Msg("failed to retrieve info from Nuki bridge")
 			}
 
-			printScanResults(os.Stdout, info.ScanResults)
+			printVersions(os.Stdout, info)
 		},
 	}
 
 	return cmd
+}
+
+func printVersions(writer io.Writer, info *bridgeapi.InfoResponse) {
+	if PrintJSON {
+		if data, err := json.MarshalIndent(info, "", "   "); err == nil {
+			fmt.Println(string(data))
+		}
+	} else {
+		if bridgeapi.HasSupportForEncryptedTokens(info.BridgeType, info.Versions.FirmwareVersion) {
+			fmt.Printf("This bridge supports encrypted tokens.\n\n")
+		}
+
+		printScanResults(os.Stdout, info.ScanResults)
+	}
 }
 
 func printScanResults(writer io.Writer, results []bridgeapi.ScanResult) {
@@ -34,5 +49,5 @@ func printScanResults(writer io.Writer, results []bridgeapi.ScanResult) {
 	for _, result := range results {
 		_, _ = fmt.Fprintf(w, "%d\t%d\t%s\t%d\t%t\n", result.ID, result.Type, result.Name, result.Rssi, result.Paired)
 	}
-	w.Flush()
+	_ = w.Flush()
 }
