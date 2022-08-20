@@ -227,6 +227,31 @@ func OpenerLockActionFromString(s string) (e LockAction, err error) {
 	return
 }
 
+// DoorsensorStateFromString retrieves the sensor state from a string
+func DoorsensorStateFromString(s string) (e DoorsensorState, err error) {
+	switch strings.ToLower(s) {
+	case "deactivated":
+		e = DoorsensorStateDeactivated
+	case "door closed":
+		e = DoorsensorStateDoorClosed
+	case "door opened":
+		e = DoorsensorStateDoorClosed
+	case "door state unknown":
+		e = DoorsensorStateDoorClosed
+	case "calibrating":
+		e = DoorsensorStateDoorClosed
+	case "uncalibrated":
+		e = DoorsensorStateDoorClosed
+	case "removed":
+		e = DoorsensorStateDoorClosed
+	case "unknown":
+		e = DoorsensorStateDoorClosed
+	default:
+		err = fmt.Errorf("unknown doorsensor state: %s", s)
+	}
+	return
+}
+
 // LockActionFromString retrieves the appropriate action for a device type from a string
 func LockActionFromString(s string, t DeviceType) (action LockAction, err error) {
 	switch t {
@@ -282,5 +307,16 @@ var (
 		OpenerStateOpening,
 		OpenerStateBootRun,
 		OpenerStateUndefined,
+	}
+
+	DoorsensorStates = [...]DoorsensorState{
+		DoorsensorStateDeactivated,
+		DoorsensorStateDoorClosed,
+		DoorsensorStateDoorOpened,
+		DoorsensorStateDoorStateUnknown,
+		DoorsensorStateCalibrating,
+		DoorsensorStateUncalibrated,
+		DoorsensorStateRemoved,
+		DoorsensorStateUnknown,
 	}
 )
