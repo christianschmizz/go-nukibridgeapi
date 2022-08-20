@@ -19,6 +19,9 @@ var (
 
 	// Token is the Auth token required for accessing the bridge's API
 	Token string
+
+	// UseEncryptedTokens enables the use of encrypted tokens (only supported by Bridge 1.0: ≥1.22.1 and Bridge 2.0: ≥2.14.0)
+	UseEncryptedTokens bool
 )
 
 // CreateCommand creates the "bridge" command group
@@ -35,6 +38,11 @@ func CreateCommand() *cobra.Command {
 
 	cmd.PersistentFlags().StringVarP(&Token, "token", "t", "", "Bridge token for auth")
 	if err := viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token")); err != nil {
+		log.Fatal().Err(err).Msg("unable to bind flag")
+	}
+
+	cmd.PersistentFlags().BoolVar(&UseEncryptedTokens, "encrypt", false, "Use encrypted tokens")
+	if err := viper.BindPFlag("encrypt", cmd.PersistentFlags().Lookup("encrypt")); err != nil {
 		log.Fatal().Err(err).Msg("unable to bind flag")
 	}
 
@@ -88,7 +96,11 @@ func mustConnect(v *viper.Viper) *bridgeapi.Connection {
 	if v == nil {
 		v = viper.GetViper()
 	}
-	conn, err := bridgeapi.ConnectWithToken(v.GetString("host"), v.GetString("token"))
+	options := make([]func(*bridgeapi.Connection), 0)
+	if v.GetBool("encrypt") {
+		options = append(options, bridgeapi.UseEncryptedToken())
+	}
+	conn, err := bridgeapi.ConnectWithToken(v.GetString("host"), v.GetString("token"), options...)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to connect to Nuki bridge")
 	}
