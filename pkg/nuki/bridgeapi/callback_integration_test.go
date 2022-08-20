@@ -21,6 +21,15 @@ func Test_CallbackHandling(t *testing.T) {
 		secondCallback        bridgeapi.Callback
 	)
 
+	t.Run("Check for existing callbacks and remove them", func(t *testing.T) {
+		listCallbacksResponse, err = conn.ListCallbacks()
+		assert.NoError(t, err)
+		for _, callback := range listCallbacksResponse.Callbacks {
+			_, err := conn.RemoveCallback(callback.ID)
+			assert.NoError(t, err)
+		}
+	})
+
 	t.Run("Add first callback", func(t *testing.T) {
 		addCallbackResponse, err = conn.AddCallback("http://192.168.1.1:8080")
 		assert.NoError(t, err)
