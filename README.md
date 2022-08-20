@@ -3,10 +3,18 @@
 This project aims to make Nuki's Bridge API accessible. Either through the 
 provided library or as a program from the command-line.
 
+The [Nuki Bridge](https://nuki.io/en/bridge/) acts as gateway between your [Nuki 
+Smartlock](https://nuki.io/en/smart-lock/) and your Wifi network, which enables 
+you to access your Nuki devices remotely.
+
 ![Develop](https://github.com/christianschmizz/go-nukibridgeapi/workflows/Build/badge.svg?branch=develop)
 
 Therefore it is introducing a command-line tool called `nukibridgectl` which 
 implements access to the basic functions of your Nuki bridge for now.
+
+:warning: **Encrypted token support**: There is currently no automatic detection for 
+support of encrypted tokens. Users of the library have to make use of the `UseEncryptedToken` 
+option to enable the use of encrypted tokens. Therefor **the CLI tool only supports hashed tokens**.
 
 # Activate the Bridge API
 
