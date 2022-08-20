@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"golang.org/x/crypto/nacl/secretbox"
 	"math/rand"
 	"net"
 	"net/http"
@@ -13,6 +12,8 @@ import (
 	"reflect"
 	"strconv"
 	"time"
+
+	"golang.org/x/crypto/nacl/secretbox"
 
 	"github.com/google/go-querystring/query"
 	"github.com/rs/zerolog/log"
